@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { PhotoBlock } from "@/domain/types";
 import { Photo } from "../primitives/Photo";
-import { PhotoLightbox } from "./PhotoLightbox";
+import { PostcardLightbox } from "../viewer/PostcardLightbox";
 
 type Props = {
   block: PhotoBlock;
@@ -58,13 +58,15 @@ export function PhotoBlockView({ block, imageUrl }: Props) {
         position: "relative",
       }}
     >
-      <Photo
-        kind={block.kind}
-        src={imageUrl}
-        alt={block.caption ?? ""}
-        fit={isHandwriting ? "contain" : "cover"}
-        style={photoStyle}
-      />
+      <div style={{ viewTransitionName: open ? undefined : `photo-${block.id}` }}>
+        <Photo
+          kind={block.kind}
+          src={imageUrl}
+          alt={block.caption ?? ""}
+          fit={isHandwriting ? "contain" : "cover"}
+          style={photoStyle}
+        />
+      </div>
       {block.caption && (
         <div
           className="t-hand"
@@ -109,11 +111,12 @@ export function PhotoBlockView({ block, imageUrl }: Props) {
           >
             {inner}
           </button>
-          <PhotoLightbox
+          <PostcardLightbox
             src={imageUrl}
             alt={block.caption}
             open={open}
             onClose={() => setOpen(false)}
+            transitionName={`photo-${block.id}`}
           />
         </>
       ) : (
