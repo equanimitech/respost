@@ -25,6 +25,9 @@ export type Draft = {
   readonly to: string;
   readonly from: string;
   readonly place: string;
+  readonly title: string;
+  readonly brief: string;
+  readonly summary: string;
   readonly blocks: ReadonlyArray<DraftBlock>;
   readonly createdAt: number;
   readonly updatedAt: number;
@@ -72,6 +75,9 @@ export type DraftSeed = {
   readonly to?: string;
   readonly from?: string;
   readonly place?: string;
+  readonly title?: string;
+  readonly brief?: string;
+  readonly summary?: string;
   readonly blocks?: ReadonlyArray<DraftBlock>;
 };
 
@@ -82,6 +88,9 @@ export function createDraft(seed: DraftSeed): Draft {
     to: seed.to ?? "",
     from: seed.from ?? "",
     place: seed.place ?? "",
+    title: seed.title ?? "",
+    brief: seed.brief ?? "",
+    summary: seed.summary ?? "",
     blocks: seed.blocks ?? [],
     createdAt: now,
     updatedAt: now,
@@ -98,6 +107,9 @@ export type DraftPatch = {
   readonly to?: string;
   readonly from?: string;
   readonly place?: string;
+  readonly title?: string;
+  readonly brief?: string;
+  readonly summary?: string;
   readonly blocks?: ReadonlyArray<DraftBlock>;
 };
 
@@ -109,6 +121,9 @@ export function saveDraft(id: DraftId, patch: DraftPatch): Draft | undefined {
     to: patch.to ?? existing.to,
     from: patch.from ?? existing.from,
     place: patch.place ?? existing.place,
+    title: patch.title ?? existing.title ?? "",
+    brief: patch.brief ?? existing.brief ?? "",
+    summary: patch.summary ?? existing.summary ?? "",
     blocks: patch.blocks ?? existing.blocks,
     updatedAt: Date.now(),
   };
