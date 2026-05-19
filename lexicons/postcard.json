@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "network.respost.postcard",
+  "id": "tech.equanimi.respost.postcard",
   "defs": {
     "main": {
       "type": "record",

@@ -72,7 +72,7 @@ Each block has a frozen id and (for photos) a frozen rotation, so the layout is 
 
 ### Persistence
 
-Postcards are stored as `network.respost.postcard` records on the sender's PDS via the AT Protocol. The recipient never authenticates — the URL alone resolves the record. See `lexicons/postcard.json` for the schema.
+Postcards are stored as `tech.equanimi.respost.postcard` records on the sender's PDS via the AT Protocol. The recipient never authenticates — the URL alone resolves the record. See `lexicons/postcard.json` for the schema.
 
 ### Tech stack
 

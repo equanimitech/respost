@@ -50,12 +50,12 @@ The sender chooses granularity per postcard. Grandma sees "Paris." A close frien
 
 ### The ATProto Lexicon
 
-Namespace: `network.respost.postcard` (you'd register `respost.network` or similar)
+Namespace: `tech.equanimi.respost.postcard`
 
 ```json
 {
   "lexicon": 1,
-  "id": "network.respost.postcard",
+  "id": "tech.equanimi.respost.postcard",
   "defs": {
     "main": {
       "type": "record",
@@ -219,7 +219,7 @@ Labels are stored per-user, not per-postcard. When you create a postcard from a 
 **Lexicon for labels** (separate record type):
 
 ```
-network.respost.label
+tech.equanimi.respost.label
   - name: "barzin"
   - location: { lat, lng, radius }
   - createdAt: datetime

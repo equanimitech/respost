@@ -1,7 +1,7 @@
 import { BskyAgent } from "@atproto/api";
 
-const POSTCARD_COLLECTION = "network.respost.postcard";
-const LABEL_COLLECTION = "network.respost.label";
+const POSTCARD_COLLECTION = "tech.equanimi.respost.postcard";
+const LABEL_COLLECTION = "tech.equanimi.respost.label";
 
 let agent: BskyAgent | null = null;
 

@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "network.respost.label",
+  "id": "tech.equanimi.respost.label",
   "defs": {
     "main": {
       "type": "record",

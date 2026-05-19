@@ -486,7 +486,7 @@ const day = (offset: number) =>
 export const fakePostcards: ReadonlyArray<Postcard> = [
   {
     id: pid("3kpc1barcelona"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc1barcelona`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc1barcelona`,
     authorDid: rafa.did,
     to: rn("Yanik"),
     from: sn(rafa.displayName),
@@ -502,7 +502,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc2lisbon"),
-    uri: `at://${yanik.did}/network.respost.postcard/3kpc2lisbon`,
+    uri: `at://${yanik.did}/tech.equanimi.respost.postcard/3kpc2lisbon`,
     authorDid: yanik.did,
     to: rn("Mama"),
     from: sn(yanik.displayName),
@@ -518,7 +518,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc3kyoto"),
-    uri: `at://${noor.did}/network.respost.postcard/3kpc3kyoto`,
+    uri: `at://${noor.did}/tech.equanimi.respost.postcard/3kpc3kyoto`,
     authorDid: noor.did,
     to: rn("Sam"),
     from: sn(noor.displayName),
@@ -534,7 +534,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc4paris"),
-    uri: `at://${elif.did}/network.respost.postcard/3kpc4paris`,
+    uri: `at://${elif.did}/tech.equanimi.respost.postcard/3kpc4paris`,
     authorDid: elif.did,
     to: rn("Léa"),
     from: sn(elif.displayName),
@@ -550,7 +550,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc5oaxaca"),
-    uri: `at://${saul.did}/network.respost.postcard/3kpc5oaxaca`,
+    uri: `at://${saul.did}/tech.equanimi.respost.postcard/3kpc5oaxaca`,
     authorDid: saul.did,
     to: rn("Dad"),
     from: sn(saul.displayName),
@@ -566,7 +566,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc6reykjavik"),
-    uri: `at://${mira.did}/network.respost.postcard/3kpc6reykjavik`,
+    uri: `at://${mira.did}/tech.equanimi.respost.postcard/3kpc6reykjavik`,
     authorDid: mira.did,
     to: rn("Theo"),
     from: sn(mira.displayName),
@@ -582,7 +582,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc7terrace"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc7terrace`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc7terrace`,
     authorDid: rafa.did,
     to: rn("Yanik"),
     from: sn(rafa.displayName),
@@ -598,7 +598,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc8saperene"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc8saperene`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc8saperene`,
     authorDid: rafa.did,
     to: rn("Noor"),
     from: sn(rafa.displayName),
@@ -613,7 +613,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc9goalsxintentions"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc9goalsxintentions`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc9goalsxintentions`,
     authorDid: rafa.did,
     to: rn("Yanik"),
     from: sn(rafa.displayName),
@@ -628,7 +628,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc10publishing"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc10publishing`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc10publishing`,
     authorDid: rafa.did,
     to: rn("Yanik"),
     from: sn(rafa.displayName),
@@ -643,7 +643,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc11eating"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc11eating`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc11eating`,
     authorDid: rafa.did,
     to: rn("Mira"),
     from: sn(rafa.displayName),
@@ -658,7 +658,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
   },
   {
     id: pid("3kpc12inbed"),
-    uri: `at://${rafa.did}/network.respost.postcard/3kpc12inbed`,
+    uri: `at://${rafa.did}/tech.equanimi.respost.postcard/3kpc12inbed`,
     authorDid: rafa.did,
     to: rn("Yanik"),
     from: sn(rafa.displayName),

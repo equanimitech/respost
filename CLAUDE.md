@@ -27,7 +27,7 @@ Layered DDD architecture with strict dependency direction: domain → applicatio
 - **`infrastructure/atproto/`** — AT Protocol SDK wrapper. Handles auth, blob upload, and record CRUD. Singleton agent pattern.
 - **`presenters/components/`** — React UI components. `PostcardMap` (MapLibre GL, "use client") and `PostcardView` (presentational).
 - **`app/`** — Next.js routes. Server components by default, call application queries directly. `/` is the map view, `/p/[rkey]` is a shareable single postcard.
-- **`lexicons/`** — AT Protocol record type schemas (`network.respost.postcard`, `network.respost.label`).
+- **`lexicons/`** — AT Protocol record type schemas (`tech.equanimi.respost.postcard`, `tech.equanimi.respost.label`).
 - **`docs/`** — `CONCEPT_BRIEF.md` (design philosophy, behavioral bets, competitive analysis) and `MVP.md` (scope, no-gos, open questions).
 
 ## Key conventions
