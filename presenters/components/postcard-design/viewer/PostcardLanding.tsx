@@ -174,6 +174,8 @@ export function PostcardLanding({
           onClick={onOpen}
           disabled={openAmount > 0.05}
           aria-label={t("openAria")}
+          aria-disabled={openAmount > 0.05}
+          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:ring-offset-2 focus-visible:outline-none"
           style={{
             width: 64,
             height: 64,
@@ -186,6 +188,7 @@ export function PostcardLanding({
             display: "inline-grid",
             placeItems: "center",
             padding: 0,
+            transition: "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <svg
@@ -197,9 +200,10 @@ export function PostcardLanding({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            aria-hidden="true"
             style={{
               transform: `rotate(${openAmount * 180}deg)`,
-              transition: "transform 200ms ease",
+              transition: "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           >
             <path d="M6 9 L12 15 L18 9" />
