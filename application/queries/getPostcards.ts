@@ -147,6 +147,7 @@ function toDomain(uri: string, record: PostcardRecord): Postcard {
       ? toLocation(record.senderLocation)
       : undefined,
     title: record.title,
+    brief: record.brief,
     summary: record.summary,
     cover: record.cover
       ? { ref: record.cover.ref.$link, mimeType: record.cover.mimeType }
