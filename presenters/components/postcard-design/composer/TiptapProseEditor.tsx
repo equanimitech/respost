@@ -13,7 +13,7 @@ type Props = {
   onChange: (markdown: string) => void;
   placeholder?: string;
   autoFocus?: boolean;
-  extraSlashItems?: readonly SlashCommandItem[];
+  slashItems?: readonly SlashCommandItem[];
 };
 
 export function TiptapProseEditor({
@@ -21,7 +21,7 @@ export function TiptapProseEditor({
   onChange,
   placeholder,
   autoFocus,
-  extraSlashItems,
+  slashItems,
 }: Props) {
   const lastEmittedRef = useRef(value);
 
@@ -37,7 +37,7 @@ export function TiptapProseEditor({
         placeholder: placeholder ?? "",
       }),
       SlashCommands.configure({
-        extraItems: extraSlashItems ?? [],
+        items: slashItems ?? [],
       }),
       Markdown.configure({
         html: false,
@@ -56,7 +56,6 @@ export function TiptapProseEditor({
     },
   });
 
-  // Sync external value changes back into the editor (e.g. reset on flush).
   useEffect(() => {
     if (!editor) return;
     if (value === lastEmittedRef.current) return;

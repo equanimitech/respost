@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ComposerChrome } from "./ComposerChrome";
 
 type Props = {
@@ -16,6 +17,7 @@ export function ComposerRecipient({
   onContinue,
   onClose,
 }: Props) {
+  const t = useTranslations("recipient");
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -31,11 +33,10 @@ export function ComposerRecipient({
 
   return (
     <div className="app">
-      <ComposerChrome step={0} total={3} title="addressed to · 1/3" onClose={onClose} />
+      <ComposerChrome step={0} total={3} title={t("chromeTitle")} onClose={onClose} />
       <div style={{ padding: "32px 28px 0", flex: 1 }}>
         <div className="t-serif" style={{ fontSize: 26, fontWeight: 500, lineHeight: 1.15 }}>
-          Who is this <br />
-          postcard for?
+          {t("question")}
         </div>
         <div
           style={{
@@ -46,7 +47,7 @@ export function ComposerRecipient({
             maxWidth: 280,
           }}
         >
-          Just a name — they&apos;ll see it on the envelope. No contacts, no accounts.
+          {t("hint")}
         </div>
 
         <div style={{ marginTop: 40, position: "relative" }}>
@@ -60,7 +61,7 @@ export function ComposerRecipient({
               marginBottom: 4,
             }}
           >
-            To
+            {t("label")}
           </div>
           <div
             style={{
@@ -75,7 +76,7 @@ export function ComposerRecipient({
               onKeyDown={(e) => {
                 if (e.key === "Enter") submit();
               }}
-              placeholder="mom"
+              placeholder={t("placeholder")}
               className="t-hand"
               style={{
                 fontSize: 38,
@@ -97,7 +98,7 @@ export function ComposerRecipient({
               lineHeight: 1.5,
             }}
           >
-            Nicknames are good. So is &quot;mãe&quot; or &quot;you in 10 years&quot;.
+            {t("hintNicknames")}
           </div>
         </div>
 
@@ -113,7 +114,7 @@ export function ComposerRecipient({
                 marginBottom: 8,
               }}
             >
-              recent
+              {t("recent")}
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {recents.map((n, i) => (
@@ -165,7 +166,7 @@ export function ComposerRecipient({
             opacity: value.trim().length === 0 ? 0.5 : 1,
           }}
         >
-          Continue →
+          {t("continue")}
         </button>
       </div>
     </div>

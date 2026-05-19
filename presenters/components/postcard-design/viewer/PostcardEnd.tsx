@@ -1,11 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 type Props = {
-  /** Pre-fill recipient on /compose when the reader wants to write back. */
   writeBackTo?: string;
 };
 
 export function PostcardEnd({ writeBackTo }: Props) {
+  const t = useTranslations("viewer");
   const composeHref = writeBackTo
     ? `/compose?to=${encodeURIComponent(writeBackTo)}`
     : "/compose";
@@ -29,7 +32,7 @@ export function PostcardEnd({ writeBackTo }: Props) {
           lineHeight: 1.6,
         }}
       >
-        fim · take your time
+        {t("endLabel")}
       </div>
 
       <div
@@ -53,7 +56,7 @@ export function PostcardEnd({ writeBackTo }: Props) {
             fontWeight: 500,
           }}
         >
-          Write one back
+          {t("writeBack")}
         </Link>
       </div>
 
@@ -67,9 +70,9 @@ export function PostcardEnd({ writeBackTo }: Props) {
           lineHeight: 1.6,
         }}
       >
-        respost has no feed, no notifications,
+        {t("endFootnoteLineOne")}
         <br />
-        no read receipts. just this card.
+        {t("endFootnoteLineTwo")}
       </div>
     </div>
   );

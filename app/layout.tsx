@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Lora, Caveat, JetBrains_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 
@@ -28,15 +30,30 @@ const mono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
-export const metadata: Metadata = {
-  title: "Respost",
-  description: "A postcard for someone you love.",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Respost",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  const title = t("title");
+  const description = t("description");
+  const ogDescription = t("ogDescription");
+  return {
+    title,
+    description,
+    icons: {
+      icon: "/respost-logo.png",
+      apple: "/respost-logo.png",
+    },
+    openGraph: {
+      title,
+      description: ogDescription,
+      images: [{ url: "/respost-logo.png", width: 1024, height: 1024 }],
+    },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "black-translucent",
+      title,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -49,15 +66,19 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${dmSans.variable} ${lora.variable} ${caveat.variable} ${mono.variable} antialiased`}
       >
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

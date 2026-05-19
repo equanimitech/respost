@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "title": "Respost",
+    "description": "Une carte postale pour quelqu'un que vous aimez.",
+    "ogDescription": "Une carte postale pour quelqu'un que vous aimez.",
+    "manifestDescription": "Des cartes postales de vrais endroits.",
+    "notFound": "Carte postale introuvable",
+    "postcardFor": "Une carte postale pour {to}",
+    "sentFromPlace": "{from} vous a envoyé une carte postale depuis {place}.",
+    "sentNoPlace": "{from} vous a envoyé une carte postale."
+  },
+  "landing": {
+    "tagline": "Une carte postale pour quelqu'un que vous aimez.",
+    "body": "Écrivez quelque chose de doux. Glissez-y une photo, une chanson, un lieu. Envoyez le lien. Sa boîte de réception, c'est déjà WhatsApp.",
+    "writeCta": "Écrire une carte",
+    "mapCta": "Ouvrir ma carte",
+    "footnoteLineOne": "pas de fil · pas de notifications",
+    "footnoteLineTwo": "pas d'accusés de lecture"
+  },
+  "recipient": {
+    "chromeTitle": "destinataire · 1/3",
+    "question": "À qui est cette carte ?",
+    "hint": "Juste un prénom — il apparaîtra sur l'enveloppe. Pas de contacts, pas de comptes.",
+    "label": "À",
+    "placeholder": "maman",
+    "hintNicknames": "Les surnoms marchent très bien. \"maman\" ou \"toi dans 10 ans\" aussi.",
+    "recent": "récents",
+    "continue": "Continuer →"
+  },
+  "editor": {
+    "chromeTitle": "écrire · 2/3",
+    "to": "à",
+    "change": "changer",
+    "addPhotoAria": "Ajouter une photo",
+    "removeBlockAria": "Retirer le bloc",
+    "tapToAddPhoto": "touchez pour ajouter une photo",
+    "addPhotoHint": "ou utilisez la barre — ou tapez / pour chanson · vidéo · lieu · lien",
+    "writeHere": "écrivez votre mot ici · tapez / pour des blocs",
+    "placeholderEmpty": "écrivez quelque chose de doux…",
+    "placeholderContinue": "continuez…",
+    "photoFailed": "La photo n'a pas pu être ajoutée",
+    "toolbar": {
+      "photo": "Photo",
+      "song": "Chanson",
+      "video": "Vidéo",
+      "place": "Lieu",
+      "link": "Lien"
+    },
+    "linkPrompt": {
+      "fetching": "récupération",
+      "cancel": "Annuler",
+      "add": "Ajouter"
+    },
+    "linkKind": {
+      "song": "chanson",
+      "video": "vidéo",
+      "place": "lieu",
+      "link": "lien"
+    },
+    "linkPlaceholder": {
+      "song": "collez un lien Spotify ou SoundCloud",
+      "video": "collez un lien YouTube",
+      "place": "collez un lien Google Maps",
+      "link": "collez n'importe quel lien"
+    },
+    "previewCta": "Aperçu →",
+    "publishFailed": "La publication a échoué"
+  },
+  "preview": {
+    "chromeTitle": "aperçu · 3/3",
+    "header": "Voici ce que {to} va voir.",
+    "subheader": "faites défiler · voilà ce qui arrive",
+    "back": "← Modifier",
+    "sending": "Envoi…",
+    "share": "Partager le lien"
+  },
+  "sent": {
+    "postmark": "ENVOYÉE",
+    "headline": "Le lien est à vous.",
+    "body": "Partagez-le avec {to}. On ne regarde pas quand (ni si) elle est ouverte.",
+    "copy": "copier",
+    "copied": "copié",
+    "writeAnother": "en écrire une autre",
+    "footnoteLineOne": "rien à relancer · pas de notifications",
+    "footnoteLineTwo": "la carte, c'est toute l'histoire",
+    "shareText": "Une carte postale pour {to} — {url}",
+    "whatsappCta": "Envoyer à {to} sur WhatsApp",
+    "fallbackRecipient": "votre ami·e"
+  },
+  "arrival": {
+    "for": "pour {addressee},",
+    "aPostcardFrom": "une carte postale de",
+    "sentFrom": "Envoyée depuis {place}",
+    "openAria": "Ouvrir",
+    "footnote": "pas de compte · pas d'app · juste cette page"
+  },
+  "viewer": {
+    "closeAria": "Fermer",
+    "from": "de {sender}",
+    "sentFromPlace": "envoyée depuis {place} · ",
+    "endLabel": "fin · prenez votre temps",
+    "writeBack": "En écrire une en retour",
+    "endFootnoteLineOne": "respost, pas de fil, pas de notifications,",
+    "endFootnoteLineTwo": "pas d'accusés de lecture. juste cette carte."
+  },
+  "chrome": {
+    "save": "Enregistrer"
+  },
+  "slashCommands": {
+    "bulletList": { "title": "Liste", "description": "Liste à puces" },
+    "numberedList": { "title": "Liste numérotée", "description": "Liste ordonnée" },
+    "quote": { "title": "Citation", "description": "Bloc de citation" },
+    "divider": { "title": "Séparateur", "description": "Trait horizontal" },
+    "bold": { "title": "Gras", "description": "Activer le gras" },
+    "italic": { "title": "Italique", "description": "Activer l'italique" }
+  },
+  "linkSlashCommands": {
+    "song": { "title": "Chanson", "description": "Collez un lien Spotify ou SoundCloud" },
+    "video": { "title": "Vidéo", "description": "Collez un lien YouTube" },
+    "place": { "title": "Lieu", "description": "Collez un lien Google Maps" },
+    "link": { "title": "Lien", "description": "Collez n'importe quel lien web" }
+  },
+  "slashMenu": {
+    "noMatches": "Aucun résultat."
+  },
+  "map": {
+    "home": "← accueil",
+    "localFakeCount": "local · {count} cartes fictives",
+    "popupFallback": "Carte postale",
+    "viewPostcard": "Voir la carte →"
+  },
+  "language": {
+    "label": "Langue"
+  },
+  "drafts": {
+    "title": "Brouillons",
+    "emptyTitle": "Aucun brouillon",
+    "emptyHint": "Commencez une carte et elle sera enregistrée ici, sur cet appareil.",
+    "newDraft": "Nouvelle carte",
+    "open": "Ouvrir",
+    "delete": "Supprimer",
+    "deleteConfirm": "Supprimer ce brouillon ?",
+    "noRecipient": "(sans destinataire)",
+    "lastEdited": "modifié {when}",
+    "back": "← accueil"
+  }
+}

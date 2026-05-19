@@ -13,50 +13,57 @@ import {
   type SlashCommandsMenuHandle,
 } from "./SlashCommandsMenu";
 
-const FORMAT_COMMANDS: readonly SlashCommandItem[] = [
-  {
-    title: "Bullet list",
-    description: "Unordered list",
-    keywords: ["ul", "list", "bullets"],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleBulletList().run(),
-  },
-  {
-    title: "Numbered list",
-    description: "Ordered list",
-    keywords: ["ol", "ordered", "numbers"],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleOrderedList().run(),
-  },
-  {
-    title: "Quote",
-    description: "Blockquote",
-    keywords: ["quote", "blockquote", ">"],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleBlockquote().run(),
-  },
-  {
-    title: "Divider",
-    description: "Horizontal rule",
-    keywords: ["hr", "divider", "---"],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).setHorizontalRule().run(),
-  },
-  {
-    title: "Bold",
-    description: "Toggle bold",
-    keywords: ["b", "strong"],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleBold().run(),
-  },
-  {
-    title: "Italic",
-    description: "Toggle italic",
-    keywords: ["i", "em"],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleItalic().run(),
-  },
-];
+export const FORMAT_COMMAND_KINDS = [
+  "bulletList",
+  "numberedList",
+  "quote",
+  "divider",
+  "bold",
+  "italic",
+] as const;
+
+export type FormatCommandKind = (typeof FORMAT_COMMAND_KINDS)[number];
+
+const FORMAT_COMMAND_KEYWORDS: Record<FormatCommandKind, readonly string[]> = {
+  bulletList: ["ul", "list", "bullets"],
+  numberedList: ["ol", "ordered", "numbers"],
+  quote: ["quote", "blockquote", ">"],
+  divider: ["hr", "divider", "---"],
+  bold: ["b", "strong"],
+  italic: ["i", "em"],
+};
+
+const FORMAT_COMMAND_ACTIONS: Record<
+  FormatCommandKind,
+  SlashCommandItem["command"]
+> = {
+  bulletList: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).toggleBulletList().run(),
+  numberedList: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).toggleOrderedList().run(),
+  quote: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).toggleBlockquote().run(),
+  divider: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).setHorizontalRule().run(),
+  bold: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).toggleBold().run(),
+  italic: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).toggleItalic().run(),
+};
+
+export function buildFormatCommands(
+  translate: (kind: FormatCommandKind) => { title: string; description: string }
+): readonly SlashCommandItem[] {
+  return FORMAT_COMMAND_KINDS.map((kind) => {
+    const labels = translate(kind);
+    return {
+      title: labels.title,
+      description: labels.description,
+      keywords: [...FORMAT_COMMAND_KEYWORDS[kind]],
+      command: FORMAT_COMMAND_ACTIONS[kind],
+    } satisfies SlashCommandItem;
+  });
+}
 
 function filterItems(
   items: readonly SlashCommandItem[],
@@ -129,7 +136,7 @@ function suggestionRenderer(): SuggestionOptions["render"] {
 }
 
 type SlashOptions = {
-  extraItems: readonly SlashCommandItem[];
+  items: readonly SlashCommandItem[];
   suggestion: Omit<SuggestionOptions, "editor">;
 };
 
@@ -137,7 +144,7 @@ export const SlashCommands = Extension.create<SlashOptions>({
   name: "slashCommands",
   addOptions() {
     return {
-      extraItems: [],
+      items: [],
       suggestion: {
         char: "/",
         startOfLine: false,
@@ -151,20 +158,18 @@ export const SlashCommands = Extension.create<SlashOptions>({
           range: { from: number; to: number };
           props: SlashCommandItem;
         }) => props.command({ editor, range }),
-        items: ({ query }: { query: string }) =>
-          filterItems(FORMAT_COMMANDS, query),
+        items: ({ query }: { query: string }) => filterItems([], query),
         render: suggestionRenderer(),
       },
     };
   },
   addProseMirrorPlugins() {
-    const extra = this.options.extraItems;
+    const items = this.options.items;
     return [
       Suggestion({
         editor: this.editor,
         ...this.options.suggestion,
-        items: ({ query }: { query: string }) =>
-          filterItems([...extra, ...FORMAT_COMMANDS], query),
+        items: ({ query }: { query: string }) => filterItems(items, query),
       }),
     ];
   },

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { ComposerSent } from "@/presenters/components/postcard-design/composer/ComposerSent";
 
 type Props = {
@@ -16,8 +17,9 @@ function fallbackOrigin(): string {
 export default async function SentPage({ params, searchParams }: Props) {
   const { rkey } = await params;
   const sp = await searchParams;
+  const t = await getTranslations("sent");
   const url = sp.url ?? `${fallbackOrigin()}/p/${rkey}`;
-  const to = sp.to ?? "your friend";
+  const to = sp.to ?? t("fallbackRecipient");
 
   return (
     <main className="phone-shell">

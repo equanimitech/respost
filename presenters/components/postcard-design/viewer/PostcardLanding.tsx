@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Icon } from "../primitives/Icon";
 import { SealedEnvelope } from "../primitives/SealedEnvelope";
 
@@ -22,6 +23,7 @@ export function PostcardLanding({
   onOpen,
   insidePhotoSrc,
 }: Props) {
+  const t = useTranslations("arrival");
   return (
     <div
       className="app paper-grain"
@@ -91,26 +93,26 @@ export function PostcardLanding({
       >
         <div
           className="t-hand"
-          style={{ fontSize: 26, color: "var(--ink-soft)", lineHeight: 1 }}
+          style={{ fontSize: 30, color: "var(--ink-soft)", lineHeight: 1 }}
         >
-          for {addressee},
+          {t("for", { addressee })}
         </div>
         <div
           className="t-mono"
           style={{
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: 2,
             color: "var(--ink-mute)",
             textTransform: "uppercase",
             marginTop: 10,
           }}
         >
-          a postcard from
+          {t("aPostcardFrom")}
         </div>
         <div
           className="t-serif"
           style={{
-            fontSize: 28,
+            fontSize: 34,
             fontWeight: 500,
             lineHeight: 1.1,
             marginTop: 4,
@@ -122,7 +124,7 @@ export function PostcardLanding({
           <div
             className="t-mono"
             style={{
-              fontSize: 10,
+              fontSize: 12,
               letterSpacing: 1.5,
               color: "var(--ink-mute)",
               textTransform: "uppercase",
@@ -133,7 +135,7 @@ export function PostcardLanding({
             }}
           >
             <Icon name="pin" size={11} color="currentColor" strokeWidth={1.8} />
-            Sent from {place}
+            {t("sentFrom", { place })}
           </div>
         )}
       </div>
@@ -171,28 +173,42 @@ export function PostcardLanding({
           type="button"
           onClick={onOpen}
           disabled={openAmount > 0.05}
+          aria-label={t("openAria")}
           style={{
-            padding: "14px 32px",
+            width: 64,
+            height: 64,
             borderRadius: 999,
             background: "var(--ink)",
             color: "var(--paper-light)",
             border: "none",
             cursor: openAmount > 0.05 ? "default" : "pointer",
-            fontFamily: "inherit",
-            fontSize: 15,
-            fontWeight: 500,
             boxShadow: "0 6px 18px rgba(40,30,20,.18)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
+            display: "inline-grid",
+            placeItems: "center",
+            padding: 0,
           }}
         >
-          {openAmount > 0.05 ? "Opening…" : "Open the envelope"}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              transform: `rotate(${openAmount * 180}deg)`,
+              transition: "transform 200ms ease",
+            }}
+          >
+            <path d="M6 9 L12 15 L18 9" />
+          </svg>
         </button>
         <div
           className="t-mono"
           style={{
-            fontSize: 9.5,
+            fontSize: 11.5,
             letterSpacing: 1.2,
             color: "var(--ink-faint)",
             textTransform: "uppercase",
@@ -200,7 +216,7 @@ export function PostcardLanding({
             lineHeight: 1.6,
           }}
         >
-          no account · no app · just this page
+          {t("footnote")}
         </div>
       </div>
     </div>

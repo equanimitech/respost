@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "title": "Respost",
+    "description": "Um postal para alguém que você ama.",
+    "ogDescription": "Um postal para alguém que você ama.",
+    "manifestDescription": "Postais de lugares de verdade.",
+    "notFound": "Postal não encontrado",
+    "postcardFor": "Um postal para {to}",
+    "sentFromPlace": "{from} te mandou um postal de {place}.",
+    "sentNoPlace": "{from} te mandou um postal."
+  },
+  "landing": {
+    "tagline": "Um postal para alguém que você ama.",
+    "body": "Escreva algo baixinho. Coloque uma foto, uma música, um lugar. Mande o link. A caixa dela já está no WhatsApp.",
+    "writeCta": "Escrever um postal",
+    "mapCta": "Abrir meu mapa",
+    "footnoteLineOne": "sem feed · sem notificações",
+    "footnoteLineTwo": "sem confirmação de leitura"
+  },
+  "recipient": {
+    "chromeTitle": "destinatário · 1/3",
+    "question": "Para quem é este postal?",
+    "hint": "Só um nome — vai aparecer no envelope. Sem contatos, sem cadastro.",
+    "label": "Para",
+    "placeholder": "mãe",
+    "hintNicknames": "Apelidos funcionam bem. \"mãe\" ou \"você daqui a 10 anos\" também.",
+    "recent": "recentes",
+    "continue": "Continuar →"
+  },
+  "editor": {
+    "chromeTitle": "escrever · 2/3",
+    "to": "para",
+    "change": "mudar",
+    "addPhotoAria": "Adicionar uma foto",
+    "removeBlockAria": "Remover bloco",
+    "tapToAddPhoto": "toque para adicionar uma foto",
+    "addPhotoHint": "ou use a barra — ou digite / para música · vídeo · lugar · link",
+    "writeHere": "escreva seu recado aqui · digite / para blocos",
+    "placeholderEmpty": "escreva algo baixinho…",
+    "placeholderContinue": "continue…",
+    "photoFailed": "Não foi possível adicionar a foto",
+    "toolbar": {
+      "photo": "Foto",
+      "song": "Música",
+      "video": "Vídeo",
+      "place": "Lugar",
+      "link": "Link"
+    },
+    "linkPrompt": {
+      "fetching": "buscando",
+      "cancel": "Cancelar",
+      "add": "Adicionar"
+    },
+    "linkKind": {
+      "song": "música",
+      "video": "vídeo",
+      "place": "lugar",
+      "link": "link"
+    },
+    "linkPlaceholder": {
+      "song": "cole um link do Spotify ou SoundCloud",
+      "video": "cole um link do YouTube",
+      "place": "cole um link do Google Maps",
+      "link": "cole qualquer link"
+    },
+    "previewCta": "Pré-visualizar →",
+    "publishFailed": "Não foi possível publicar"
+  },
+  "preview": {
+    "chromeTitle": "pré-visualizar · 3/3",
+    "header": "É assim que {to} vai ver.",
+    "subheader": "role devagar · é isso que chega",
+    "back": "← Editar",
+    "sending": "Enviando…",
+    "share": "Compartilhar o link"
+  },
+  "sent": {
+    "postmark": "ENVIADO",
+    "headline": "O link agora é seu.",
+    "body": "Mande para {to}. A gente não fica olhando quando (nem se) for aberto.",
+    "copy": "copiar",
+    "copied": "copiado",
+    "writeAnother": "escrever outro",
+    "footnoteLineOne": "nada para acompanhar · sem notificações",
+    "footnoteLineTwo": "o postal é o acontecimento inteiro",
+    "shareText": "Um postal para {to} — {url}",
+    "whatsappCta": "Mandar para {to} no WhatsApp",
+    "fallbackRecipient": "seu amigo"
+  },
+  "arrival": {
+    "for": "para {addressee},",
+    "aPostcardFrom": "um postal de",
+    "sentFrom": "Enviado de {place}",
+    "openAria": "Abrir",
+    "footnote": "sem conta · sem app · só esta página mesmo"
+  },
+  "viewer": {
+    "closeAria": "Fechar",
+    "from": "de {sender}",
+    "sentFromPlace": "enviado de {place} · ",
+    "endLabel": "fim · sem pressa",
+    "writeBack": "Mandar um de volta",
+    "endFootnoteLineOne": "o respost não tem feed, nem notificações,",
+    "endFootnoteLineTwo": "nem confirmação de leitura. só este postal."
+  },
+  "chrome": {
+    "save": "Salvar"
+  },
+  "slashCommands": {
+    "bulletList": { "title": "Lista", "description": "Lista com marcadores" },
+    "numberedList": { "title": "Lista numerada", "description": "Lista ordenada" },
+    "quote": { "title": "Citação", "description": "Bloco de citação" },
+    "divider": { "title": "Divisor", "description": "Linha horizontal" },
+    "bold": { "title": "Negrito", "description": "Alternar negrito" },
+    "italic": { "title": "Itálico", "description": "Alternar itálico" }
+  },
+  "linkSlashCommands": {
+    "song": { "title": "Música", "description": "Cole um link do Spotify ou SoundCloud" },
+    "video": { "title": "Vídeo", "description": "Cole um link do YouTube" },
+    "place": { "title": "Lugar", "description": "Cole um link do Google Maps" },
+    "link": { "title": "Link", "description": "Cole qualquer link" }
+  },
+  "slashMenu": {
+    "noMatches": "Sem resultados."
+  },
+  "map": {
+    "home": "← início",
+    "localFakeCount": "local · {count} postais de teste",
+    "popupFallback": "Postal",
+    "viewPostcard": "Ver postal →"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "drafts": {
+    "title": "Rascunhos",
+    "emptyTitle": "Nenhum rascunho ainda",
+    "emptyHint": "Comece um postal e ele fica salvo aqui no aparelho.",
+    "newDraft": "Novo postal",
+    "open": "Abrir",
+    "delete": "Excluir",
+    "deleteConfirm": "Excluir este rascunho?",
+    "noRecipient": "(sem destinatário)",
+    "lastEdited": "editado {when}",
+    "back": "← início"
+  }
+}

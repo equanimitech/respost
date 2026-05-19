@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { getPostcardByKey } from "@/application/queries/getPostcards";
 import { blobImageUrl } from "@/infrastructure/atproto/client";
 import { ArrivalExperience } from "@/presenters/components/postcard-design/arrival/ArrivalExperience";
@@ -28,16 +29,19 @@ function buildImageMap(postcard: Postcard): Record<string, string> {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { rkey } = await params;
+  const t = await getTranslations("meta");
   const postcard = await getPostcardByKey(rkey).catch(() => null);
 
   if (!postcard) {
-    return { title: "Postcard not found" };
+    return { title: t("notFound") };
   }
 
-  const title = postcard.title ?? `A postcard for ${postcard.to}`;
+  const title = postcard.title ?? t("postcardFor", { to: postcard.to });
   const description =
     postcard.summary ??
-    `${postcard.from} sent you a postcard${postcard.place ? ` from ${postcard.place}` : ""}.`;
+    (postcard.place
+      ? t("sentFromPlace", { from: postcard.from, place: postcard.place })
+      : t("sentNoPlace", { from: postcard.from }));
 
   const coverRef = postcard.cover?.ref ?? firstPhotoRef(postcard);
   const ogImage = coverRef

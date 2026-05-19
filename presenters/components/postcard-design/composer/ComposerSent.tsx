@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Postmark } from "../primitives/Postmark";
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function ComposerSent({ to, shareUrl }: Props) {
+  const t = useTranslations("sent");
   const [copied, setCopied] = useState(false);
 
   const copyLink = async () => {
@@ -23,7 +25,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
   };
 
   const sendViaWhatsApp = async () => {
-    const text = `A postcard for ${to} — ${shareUrl}`;
+    const text = t("shareText", { to, url: shareUrl });
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({ url: shareUrl, text });
@@ -55,7 +57,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
             marginBottom: 24,
           }}
         >
-          <Postmark place="SENT" date="" size={110} rot={-8} tone="var(--terra-deep)" />
+          <Postmark place={t("postmark")} date="" size={110} rot={-8} tone="var(--terra-deep)" />
         </div>
 
         <div
@@ -67,7 +69,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
             textAlign: "center",
           }}
         >
-          The link is yours now.
+          {t("headline")}
         </div>
         <div
           style={{
@@ -79,7 +81,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
             maxWidth: 280,
           }}
         >
-          Share it with {to}. We don&apos;t track when (or whether) they open it.
+          {t("body", { to })}
         </div>
 
         <button
@@ -123,7 +125,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
               flexShrink: 0,
             }}
           >
-            {copied ? "copied" : "copy"}
+            {copied ? t("copied") : t("copy")}
           </span>
         </button>
 
@@ -137,7 +139,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
             textUnderlineOffset: 4,
           }}
         >
-          write another
+          {t("writeAnother")}
         </Link>
 
         <div
@@ -152,9 +154,9 @@ export function ComposerSent({ to, shareUrl }: Props) {
             lineHeight: 1.7,
           }}
         >
-          nothing to follow up · no notifications
+          {t("footnoteLineOne")}
           <br />
-          the postcard is the entire event
+          {t("footnoteLineTwo")}
         </div>
       </div>
 
@@ -188,7 +190,7 @@ export function ComposerSent({ to, shareUrl }: Props) {
             boxShadow: "0 4px 16px rgba(37,211,102,.32)",
           }}
         >
-          Send to {to} on WhatsApp
+          {t("whatsappCta", { to })}
         </button>
       </div>
     </div>

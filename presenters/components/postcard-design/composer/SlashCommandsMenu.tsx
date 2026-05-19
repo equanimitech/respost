@@ -6,6 +6,7 @@ import {
   useImperativeHandle,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import {
   Command,
   CommandEmpty,
@@ -35,6 +36,7 @@ export type SlashCommandsMenuHandle = {
 
 export const SlashCommandsMenu = forwardRef<SlashCommandsMenuHandle, Props>(
   function SlashCommandsMenu({ items, command }, ref) {
+    const t = useTranslations("slashMenu");
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     useEffect(() => {
@@ -70,7 +72,7 @@ export const SlashCommandsMenu = forwardRef<SlashCommandsMenuHandle, Props>(
         className="w-64 border border-border shadow-[var(--sh-card)]"
       >
         <CommandList>
-          <CommandEmpty>No matches.</CommandEmpty>
+          <CommandEmpty>{t("noMatches")}</CommandEmpty>
           <CommandGroup>
             {items.map((item, index) => (
               <CommandItem

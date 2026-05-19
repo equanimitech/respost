@@ -1,8 +1,20 @@
+"use client";
+
 import type { Postcard } from "@/domain/types";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, type Locale as DateLocale } from "date-fns";
+import { enUS, ptBR, es, fr } from "date-fns/locale";
+import { useLocale, useTranslations } from "next-intl";
+import type { Locale as AppLocale } from "@/i18n/locales";
 import { Postmark } from "../primitives/Postmark";
 
 type Props = { postcard: Postcard };
+
+const DATE_LOCALES: Record<AppLocale, DateLocale> = {
+  en: enUS,
+  pt: ptBR,
+  es,
+  fr,
+};
 
 function senderInitial(name: string): string {
   const trimmed = name.trim();
@@ -24,6 +36,9 @@ function formatDate(d: Date): string {
 }
 
 export function PostcardHeader({ postcard }: Props) {
+  const t = useTranslations("viewer");
+  const locale = useLocale() as AppLocale;
+  const dateLocale = DATE_LOCALES[locale] ?? enUS;
   return (
     <div
       style={{
@@ -55,7 +70,7 @@ export function PostcardHeader({ postcard }: Props) {
           className="t-serif"
           style={{ fontSize: 18, fontWeight: 500, lineHeight: 1.1 }}
         >
-          from {postcard.from}
+          {t("from", { sender: postcard.from })}
         </div>
         <div
           className="t-mono"
@@ -67,8 +82,11 @@ export function PostcardHeader({ postcard }: Props) {
             marginTop: 3,
           }}
         >
-          {postcard.place ? `sent from ${postcard.place} · ` : ""}
-          {formatDistanceToNowStrict(postcard.createdAt, { addSuffix: true })}
+          {postcard.place ? t("sentFromPlace", { place: postcard.place }) : ""}
+          {formatDistanceToNowStrict(postcard.createdAt, {
+            addSuffix: true,
+            locale: dateLocale,
+          })}
         </div>
       </div>
       <Postmark

@@ -3,8 +3,18 @@
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, type Locale as DateLocale } from "date-fns";
+import { enUS, ptBR, es, fr } from "date-fns/locale";
+import { useLocale, useTranslations } from "next-intl";
 import type { PostcardMarker } from "@/domain/types";
+import type { Locale as AppLocale } from "@/i18n/locales";
+
+const DATE_LOCALES: Record<AppLocale, DateLocale> = {
+  en: enUS,
+  pt: ptBR,
+  es,
+  fr,
+};
 
 function escapeHtml(s: string): string {
   return s
@@ -27,6 +37,11 @@ type PostcardMapProps = {
 export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const t = useTranslations("map");
+  const locale = useLocale() as AppLocale;
+  const dateLocale = DATE_LOCALES[locale] ?? enUS;
+  const popupFallback = t("popupFallback");
+  const viewLabel = t("viewPostcard");
 
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return;
@@ -70,11 +85,12 @@ export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
         const opacity = Math.max(0.3, 1 - ageDays / 30); // fade over 30 days
         el.style.opacity = String(opacity);
 
-        const title = marker.title ? escapeHtml(marker.title) : "Postcard";
+        const title = marker.title ? escapeHtml(marker.title) : popupFallback;
         const brief = marker.brief ? escapeHtml(marker.brief) : "";
         const place = marker.place ? escapeHtml(marker.place) : "";
         const ago = formatDistanceToNowStrict(marker.createdAt, {
           addSuffix: true,
+          locale: dateLocale,
         });
         const meta = [place, ago].filter(Boolean).join(" · ");
 
@@ -85,7 +101,7 @@ export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
               ${brief ? `<p style="margin: 4px 0 0; font-size: 12px; color: #444; line-height: 1.35;">${brief}</p>` : ""}
               <p style="margin: 6px 0 0; font-size: 10px; color: #888; letter-spacing: 0.6px; text-transform: uppercase;">${meta}</p>
               <a href="${hrefBase}/${marker.id}" style="display: inline-block; margin-top: 6px; font-size: 11px; color: #b8634a;">
-                View postcard →
+                ${escapeHtml(viewLabel)}
               </a>
             </div>`
           );
@@ -110,7 +126,7 @@ export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [markers, hrefBase]);
+  }, [markers, hrefBase, popupFallback, viewLabel, dateLocale]);
 
   return (
     <div ref={mapContainer} className="h-full w-full" />

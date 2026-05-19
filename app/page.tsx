@@ -1,7 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Postmark } from "@/presenters/components/postcard-design/primitives/Postmark";
+import { getTranslations } from "next-intl/server";
+import { LocaleSwitcher } from "@/presenters/components/LocaleSwitcher";
 
-export default function Home() {
+export default async function Home() {
+  const t = await getTranslations("landing");
   return (
     <main className="phone-shell">
       <div className="phone-frame paper-grain">
@@ -17,7 +20,14 @@ export default function Home() {
           }}
         >
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 22 }}>
-            <Postmark place="RESPOST" date="" size={120} rot={-6} tone="var(--terra-deep)" />
+            <Image
+              src="/respost-logo.png"
+              alt="Respost"
+              width={120}
+              height={120}
+              priority
+              style={{ width: 120, height: 120 }}
+            />
           </div>
 
           <h1
@@ -31,7 +41,7 @@ export default function Home() {
               maxWidth: 340,
             }}
           >
-            A postcard for someone you love.
+            {t("tagline")}
           </h1>
           <p
             style={{
@@ -43,8 +53,7 @@ export default function Home() {
               maxWidth: 320,
             }}
           >
-            Write something quiet. Tuck in a photo, a song, a place. Send the link.
-            Their inbox is already on WhatsApp.
+            {t("body")}
           </p>
 
           <div style={{ marginTop: 30, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -62,7 +71,7 @@ export default function Home() {
                 boxShadow: "0 6px 18px rgba(40,30,20,.18)",
               }}
             >
-              Write a postcard
+              {t("writeCta")}
             </Link>
             <Link
               href="/map"
@@ -75,7 +84,7 @@ export default function Home() {
                 textAlign: "center",
               }}
             >
-              Open my map
+              {t("mapCta")}
             </Link>
           </div>
 
@@ -91,9 +100,13 @@ export default function Home() {
               lineHeight: 1.7,
             }}
           >
-            no feed · no notifications
+            {t("footnoteLineOne")}
             <br />
-            no read receipts
+            {t("footnoteLineTwo")}
+          </div>
+
+          <div style={{ marginTop: 28 }}>
+            <LocaleSwitcher />
           </div>
         </div>
       </div>

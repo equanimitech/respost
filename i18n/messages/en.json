@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "title": "Respost",
+    "description": "A postcard for someone you love.",
+    "ogDescription": "A postcard for someone you love.",
+    "manifestDescription": "Postcards from real places.",
+    "notFound": "Postcard not found",
+    "postcardFor": "A postcard for {to}",
+    "sentFromPlace": "{from} sent you a postcard from {place}.",
+    "sentNoPlace": "{from} sent you a postcard."
+  },
+  "landing": {
+    "tagline": "A postcard for someone you love.",
+    "body": "Write something quiet. Tuck in a photo, a song, a place. Send the link. Their inbox is already on WhatsApp.",
+    "writeCta": "Write a postcard",
+    "mapCta": "Open my map",
+    "footnoteLineOne": "no feed · no notifications",
+    "footnoteLineTwo": "no read receipts"
+  },
+  "recipient": {
+    "chromeTitle": "addressed to · 1/3",
+    "question": "Who is this postcard for?",
+    "hint": "Just a name — they'll see it on the envelope. No contacts, no accounts.",
+    "label": "To",
+    "placeholder": "mom",
+    "hintNicknames": "Nicknames are good. So is \"mãe\" or \"you in 10 years\".",
+    "recent": "recent",
+    "continue": "Continue →"
+  },
+  "editor": {
+    "chromeTitle": "write · 2/3",
+    "to": "to",
+    "change": "change",
+    "addPhotoAria": "Add a photo",
+    "removeBlockAria": "Remove block",
+    "tapToAddPhoto": "tap to add a photo",
+    "addPhotoHint": "or use the toolbar — or type / for song · video · place · link",
+    "writeHere": "write your note here · type / for blocks",
+    "placeholderEmpty": "write something quiet…",
+    "placeholderContinue": "keep going…",
+    "photoFailed": "Photo failed",
+    "toolbar": {
+      "photo": "Photo",
+      "song": "Song",
+      "video": "Video",
+      "place": "Place",
+      "link": "Link"
+    },
+    "linkPrompt": {
+      "fetching": "fetching",
+      "cancel": "Cancel",
+      "add": "Add"
+    },
+    "linkKind": {
+      "song": "song",
+      "video": "video",
+      "place": "place",
+      "link": "link"
+    },
+    "linkPlaceholder": {
+      "song": "paste a Spotify or SoundCloud URL",
+      "video": "paste a YouTube URL",
+      "place": "paste a Google Maps URL",
+      "link": "paste any URL"
+    },
+    "previewCta": "Preview →",
+    "publishFailed": "Publish failed"
+  },
+  "preview": {
+    "chromeTitle": "preview · 3/3",
+    "header": "Here's how {to} will see it.",
+    "subheader": "scroll through · this is what arrives",
+    "back": "← Edit",
+    "sending": "Sending…",
+    "share": "Share the link"
+  },
+  "sent": {
+    "postmark": "SENT",
+    "headline": "The link is yours now.",
+    "body": "Share it with {to}. We don't track when (or whether) they open it.",
+    "copy": "copy",
+    "copied": "copied",
+    "writeAnother": "write another",
+    "footnoteLineOne": "nothing to follow up · no notifications",
+    "footnoteLineTwo": "the postcard is the entire event",
+    "shareText": "A postcard for {to} — {url}",
+    "whatsappCta": "Send to {to} on WhatsApp",
+    "fallbackRecipient": "your friend"
+  },
+  "arrival": {
+    "for": "for {addressee},",
+    "aPostcardFrom": "a postcard from",
+    "sentFrom": "Sent from {place}",
+    "openAria": "Open",
+    "footnote": "no account · no app · just this page"
+  },
+  "viewer": {
+    "closeAria": "Close",
+    "from": "from {sender}",
+    "sentFromPlace": "sent from {place} · ",
+    "endLabel": "fim · take your time",
+    "writeBack": "Write one back",
+    "endFootnoteLineOne": "respost has no feed, no notifications,",
+    "endFootnoteLineTwo": "no read receipts. just this card."
+  },
+  "chrome": {
+    "save": "Save"
+  },
+  "slashCommands": {
+    "bulletList": { "title": "Bullet list", "description": "Unordered list" },
+    "numberedList": { "title": "Numbered list", "description": "Ordered list" },
+    "quote": { "title": "Quote", "description": "Blockquote" },
+    "divider": { "title": "Divider", "description": "Horizontal rule" },
+    "bold": { "title": "Bold", "description": "Toggle bold" },
+    "italic": { "title": "Italic", "description": "Toggle italic" }
+  },
+  "linkSlashCommands": {
+    "song": { "title": "Song", "description": "Paste a Spotify or SoundCloud link" },
+    "video": { "title": "Video", "description": "Paste a YouTube link" },
+    "place": { "title": "Place", "description": "Paste a Google Maps link" },
+    "link": { "title": "Link", "description": "Paste any web link" }
+  },
+  "slashMenu": {
+    "noMatches": "No matches."
+  },
+  "map": {
+    "home": "← home",
+    "localFakeCount": "local · {count} fake postcards",
+    "popupFallback": "Postcard",
+    "viewPostcard": "View postcard →"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "drafts": {
+    "title": "Drafts",
+    "emptyTitle": "No drafts yet",
+    "emptyHint": "Start a postcard and it'll save here on this device.",
+    "newDraft": "New postcard",
+    "open": "Open",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this draft?",
+    "noRecipient": "(no recipient)",
+    "lastEdited": "edited {when}",
+    "back": "← home"
+  }
+}

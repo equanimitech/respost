@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import type { DraftBlock } from "@/application/actions/publishPostcard";
 import { uploadImageBlob } from "@/application/actions/uploadImageBlob";
 import { resolveLink, type LinkKind } from "@/application/actions/resolveLink";
@@ -11,6 +12,10 @@ import { ComposerChrome } from "./ComposerChrome";
 import { compressImage } from "../compose-flow/compressImage";
 import { TiptapProseEditor } from "./TiptapProseEditor";
 import type { SlashCommandItem } from "./SlashCommandsMenu";
+import {
+  buildFormatCommands,
+  type FormatCommandKind,
+} from "./slashCommands";
 
 type Props = {
   to: string;
@@ -55,20 +60,6 @@ function draftToView(d: DraftBlock, idx: number): Block {
 
 const URL_RE = /^https?:\/\/[^\s]+$/;
 
-const LINK_KIND_LABEL: Record<LinkKind, string> = {
-  song: "song",
-  video: "video",
-  place: "place",
-  link: "link",
-};
-
-const LINK_KIND_PLACEHOLDER: Record<LinkKind, string> = {
-  song: "paste a Spotify or SoundCloud URL",
-  video: "paste a YouTube URL",
-  place: "paste a Google Maps URL",
-  link: "paste any URL",
-};
-
 export function ComposerEditor({
   to,
   blocks,
@@ -79,6 +70,7 @@ export function ComposerEditor({
   resolveImageUrl,
   onRegisterPreviewUrl,
 }: Props) {
+  const t = useTranslations("editor");
   const [draftMd, setDraftMd] = useState("");
   const [photoBusy, setPhotoBusy] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
@@ -132,7 +124,7 @@ export function ComposerEditor({
       onChange(next);
       setDraftMd("");
     } catch (err) {
-      setPhotoError(err instanceof Error ? err.message : "Photo failed");
+      setPhotoError(err instanceof Error ? err.message : t("photoFailed"));
     } finally {
       setPhotoBusy(false);
     }
@@ -184,11 +176,21 @@ export function ComposerEditor({
     onPreview();
   };
 
+  const tSlash = useTranslations("linkSlashCommands");
+  const tFormat = useTranslations("slashCommands");
+  const formatSlashItems = useMemo<readonly SlashCommandItem[]>(
+    () =>
+      buildFormatCommands((kind: FormatCommandKind) => ({
+        title: tFormat(`${kind}.title`),
+        description: tFormat(`${kind}.description`),
+      })),
+    [tFormat]
+  );
   const linkSlashItems = useMemo<SlashCommandItem[]>(
     () => [
       {
-        title: "Song",
-        description: "Paste a Spotify or SoundCloud link",
+        title: tSlash("song.title"),
+        description: tSlash("song.description"),
         keywords: ["song", "music", "spotify", "soundcloud", "track"],
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
@@ -196,8 +198,8 @@ export function ComposerEditor({
         },
       },
       {
-        title: "Video",
-        description: "Paste a YouTube link",
+        title: tSlash("video.title"),
+        description: tSlash("video.description"),
         keywords: ["video", "youtube", "yt", "clip"],
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
@@ -205,8 +207,8 @@ export function ComposerEditor({
         },
       },
       {
-        title: "Place",
-        description: "Paste a Google Maps link",
+        title: tSlash("place.title"),
+        description: tSlash("place.description"),
         keywords: ["place", "map", "maps", "location", "pin"],
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
@@ -214,8 +216,8 @@ export function ComposerEditor({
         },
       },
       {
-        title: "Link",
-        description: "Paste any web link",
+        title: tSlash("link.title"),
+        description: tSlash("link.description"),
         keywords: ["link", "article", "url", "web", "page"],
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
@@ -223,12 +225,12 @@ export function ComposerEditor({
         },
       },
     ],
-    []
+    [tSlash]
   );
 
   return (
     <div className="app">
-      <ComposerChrome step={1} total={3} title="write · 2/3" onClose={onClose} />
+      <ComposerChrome step={1} total={3} title={t("chromeTitle")} onClose={onClose} />
 
       {/* Addressee tab */}
       <div
@@ -250,7 +252,7 @@ export function ComposerEditor({
             textTransform: "uppercase",
           }}
         >
-          to
+          {t("to")}
         </div>
         <div className="t-hand" style={{ fontSize: 19, color: "var(--ink)", lineHeight: 1 }}>
           {to}
@@ -268,7 +270,7 @@ export function ComposerEditor({
             fontFamily: "inherit",
           }}
         >
-          change
+          {t("change")}
         </button>
       </div>
 
@@ -305,14 +307,14 @@ export function ComposerEditor({
                 gap: 6,
                 fontFamily: "inherit",
               }}
-              aria-label="Add a photo"
+              aria-label={t("addPhotoAria")}
             >
               <Icon name="image" size={26} strokeWidth={1.4} />
               <div className="t-mono" style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase" }}>
-                tap to add a photo
+                {t("tapToAddPhoto")}
               </div>
               <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>
-                or use the toolbar — or type / for song · video · place · link
+                {t("addPhotoHint")}
               </div>
             </button>
           )}
@@ -323,7 +325,7 @@ export function ComposerEditor({
               <button
                 type="button"
                 onClick={() => removeBlock(i)}
-                aria-label="Remove block"
+                aria-label={t("removeBlockAria")}
                 style={{
                   position: "absolute",
                   top: 12,
@@ -369,14 +371,14 @@ export function ComposerEditor({
                   gap: 6,
                 }}
               >
-                <span aria-hidden>✎</span> write your note here · type / for blocks
+                <span aria-hidden>✎</span> {t("writeHere")}
               </div>
             )}
             <TiptapProseEditor
               value={draftMd}
               onChange={setDraftMd}
-              extraSlashItems={linkSlashItems}
-              placeholder={blocks.length === 0 ? "write something quiet…" : "keep going…"}
+              slashItems={[...linkSlashItems, ...formatSlashItems]}
+              placeholder={blocks.length === 0 ? t("placeholderEmpty") : t("placeholderContinue")}
             />
           </div>
         </div>
@@ -420,8 +422,8 @@ export function ComposerEditor({
               textTransform: "uppercase",
             }}
           >
-            /{LINK_KIND_LABEL[linkPrompt.kind]}
-            {linkPrompt.resolving ? " · fetching" : ""}
+            /{t(`linkKind.${linkPrompt.kind}`)}
+            {linkPrompt.resolving ? ` · ${t("linkPrompt.fetching")}` : ""}
           </div>
           <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
             <input
@@ -439,7 +441,7 @@ export function ComposerEditor({
                 if (e.key === "Enter") submitLink();
                 else if (e.key === "Escape") dismissLinkPrompt();
               }}
-              placeholder={LINK_KIND_PLACEHOLDER[linkPrompt.kind]}
+              placeholder={t(`linkPlaceholder.${linkPrompt.kind}`)}
               disabled={linkPrompt.resolving}
               className="t-mono"
               style={{
@@ -469,7 +471,7 @@ export function ComposerEditor({
                 fontSize: 12,
               }}
             >
-              Cancel
+              {t("linkPrompt.cancel")}
             </button>
             <button
               type="button"
@@ -495,7 +497,7 @@ export function ComposerEditor({
                 fontWeight: 500,
               }}
             >
-              Add
+              {t("linkPrompt.add")}
             </button>
           </div>
           {linkPrompt.error && (
@@ -523,54 +525,46 @@ export function ComposerEditor({
           onClick={() => onPickPhoto("uploaded")}
           disabled={photoBusy}
           style={toolBtnStyle()}
+          title={t("toolbar.photo")}
+          aria-label={t("toolbar.photo")}
         >
           <Icon name="image" size={18} strokeWidth={1.6} />
-          <span style={toolBtnLabelStyle()}>Photo</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => onPickPhoto("handwriting")}
-          disabled={photoBusy}
-          style={toolBtnStyle()}
-        >
-          <Icon name="paper" size={18} strokeWidth={1.6} />
-          <span style={toolBtnLabelStyle()}>Handwriting</span>
         </button>
         <button
           type="button"
           onClick={() => openLinkPrompt("song")}
           style={toolBtnStyle()}
-          title="/song"
+          title={t("toolbar.song")}
+          aria-label={t("toolbar.song")}
         >
           <Icon name="music" size={18} strokeWidth={1.6} />
-          <span style={toolBtnLabelStyle()}>Song</span>
         </button>
         <button
           type="button"
           onClick={() => openLinkPrompt("video")}
           style={toolBtnStyle()}
-          title="/video"
+          title={t("toolbar.video")}
+          aria-label={t("toolbar.video")}
         >
           <Icon name="play" size={18} strokeWidth={1.6} />
-          <span style={toolBtnLabelStyle()}>Video</span>
         </button>
         <button
           type="button"
           onClick={() => openLinkPrompt("place")}
           style={toolBtnStyle()}
-          title="/place"
+          title={t("toolbar.place")}
+          aria-label={t("toolbar.place")}
         >
           <Icon name="pin" size={18} strokeWidth={1.6} />
-          <span style={toolBtnLabelStyle()}>Place</span>
         </button>
         <button
           type="button"
           onClick={() => openLinkPrompt("link")}
           style={toolBtnStyle()}
-          title="/link"
+          title={t("toolbar.link")}
+          aria-label={t("toolbar.link")}
         >
           <Icon name="edit" size={18} strokeWidth={1.6} />
-          <span style={toolBtnLabelStyle()}>Link</span>
         </button>
         <input
           ref={fileRef}
@@ -615,7 +609,7 @@ export function ComposerEditor({
             opacity: blocks.length === 0 && draftMd.trim().length === 0 ? 0.45 : 1,
           }}
         >
-          Preview →
+          {t("previewCta")}
         </button>
       </div>
     </div>
@@ -624,8 +618,9 @@ export function ComposerEditor({
 
 function toolBtnStyle() {
   return {
-    minHeight: 34,
-    padding: "5px 10px",
+    width: 38,
+    height: 38,
+    padding: 0,
     borderRadius: 8,
     background: "transparent",
     border: "1px solid var(--paper-edge)",
@@ -633,16 +628,8 @@ function toolBtnStyle() {
     color: "var(--ink-soft)",
     display: "inline-flex",
     alignItems: "center",
-    gap: 5,
+    justifyContent: "center",
+    flexShrink: 0,
     fontFamily: "inherit",
-    fontSize: 12,
-  } as const;
-}
-
-function toolBtnLabelStyle() {
-  return {
-    fontFamily: "var(--font-sans-display), sans-serif",
-    fontSize: 12,
-    color: "var(--ink-soft)",
   } as const;
 }

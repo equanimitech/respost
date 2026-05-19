@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { getPostcardMarkers } from "@/application/queries/getPostcards";
 import { fakePostcards } from "@/application/fixtures/fakeData";
 import { PostcardMap } from "@/presenters/components/Map/PostcardMap";
@@ -33,6 +34,7 @@ function fakeMarkers(): PostcardMarker[] {
 
 export default async function MapPage({ searchParams }: MapPageProps) {
   const { fake } = await searchParams;
+  const t = await getTranslations("map");
   const isFake = fake === "1" || fake === "true";
 
   let markers: PostcardMarker[] = [];
@@ -69,7 +71,7 @@ export default async function MapPage({ searchParams }: MapPageProps) {
           boxShadow: "var(--sh-card)",
         }}
       >
-        ← home
+        {t("home")}
       </Link>
       {isFake && (
         <div
@@ -88,7 +90,7 @@ export default async function MapPage({ searchParams }: MapPageProps) {
             boxShadow: "var(--sh-card)",
           }}
         >
-          local · {markers.length} fake postcards
+          {t("localFakeCount", { count: markers.length })}
         </div>
       )}
     </main>

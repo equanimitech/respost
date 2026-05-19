@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { DraftBlock } from "@/application/actions/publishPostcard";
 import type { Block, BlockId, PhotoBlock, PhotoKind } from "@/domain/types";
 import { PostcardBlockView } from "../blocks/PostcardBlockView";
@@ -56,13 +57,14 @@ export function ComposerPreview({
   onClose,
   resolveImageUrl,
 }: Props) {
+  const t = useTranslations("preview");
   return (
     <div className="app paper-grain">
-      <ComposerChrome step={2} total={3} title="preview · 3/3" onClose={onClose} />
+      <ComposerChrome step={2} total={3} title={t("chromeTitle")} onClose={onClose} />
 
       <div style={{ padding: "8px 22px 12px", textAlign: "center", flexShrink: 0 }}>
         <div className="t-serif" style={{ fontSize: 17, fontWeight: 500 }}>
-          Here&apos;s how {to} will see it.
+          {t("header", { to })}
         </div>
         <div
           className="t-mono"
@@ -74,7 +76,7 @@ export function ComposerPreview({
             marginTop: 4,
           }}
         >
-          scroll through · this is what arrives
+          {t("subheader")}
         </div>
       </div>
 
@@ -136,7 +138,7 @@ export function ComposerPreview({
               fontSize: 14,
             }}
           >
-            ← Edit
+            {t("back")}
           </button>
           <button
             type="button"
@@ -156,7 +158,7 @@ export function ComposerPreview({
               boxShadow: "0 4px 16px rgba(184,99,74,.3)",
             }}
           >
-            {publishing ? "Sending…" : "Share the link"}
+            {publishing ? t("sending") : t("share")}
           </button>
         </div>
       </div>

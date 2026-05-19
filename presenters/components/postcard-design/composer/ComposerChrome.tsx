@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "../primitives/Icon";
 
 type Props = {
@@ -9,6 +12,7 @@ type Props = {
 };
 
 export function ComposerChrome({ step, total = 3, title, onClose, onSave }: Props) {
+  const t = useTranslations("chrome");
   return (
     <div
       style={{
@@ -74,7 +78,7 @@ export function ComposerChrome({ step, total = 3, title, onClose, onSave }: Prop
           visibility: onSave ? "visible" : "hidden",
         }}
       >
-        Save
+        {t("save")}
       </button>
     </div>
   );

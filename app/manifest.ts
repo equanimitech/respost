@@ -1,10 +1,12 @@
 import type { MetadataRoute } from "next";
+import { getTranslations } from "next-intl/server";
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const t = await getTranslations("meta");
   return {
-    name: "Respost",
-    short_name: "Respost",
-    description: "Postcards from real places.",
+    name: t("title"),
+    short_name: t("title"),
+    description: t("manifestDescription"),
     start_url: "/",
     display: "standalone",
     background_color: "#fafaf9",
