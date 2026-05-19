@@ -32,6 +32,9 @@ const composeUrlInputSchema = z.object({
   to: z.string().max(80).optional(),
   from: z.string().max(80).optional(),
   place: z.string().max(160).optional(),
+  title: z.string().max(200).optional(),
+  brief: z.string().max(160).optional(),
+  summary: z.string().max(600).optional(),
   blocks: draftBlocksSchema.optional(),
 });
 
@@ -52,6 +55,9 @@ export function buildComposeUrl(input: ComposeUrlInput): string {
   if (input.to) params.set("to", input.to);
   if (input.from) params.set("from", input.from);
   if (input.place) params.set("place", input.place);
+  if (input.title) params.set("title", input.title);
+  if (input.brief) params.set("brief", input.brief);
+  if (input.summary) params.set("summary", input.summary);
   if (input.blocks && input.blocks.length > 0) {
     params.set("blocks", JSON.stringify(input.blocks));
   }
