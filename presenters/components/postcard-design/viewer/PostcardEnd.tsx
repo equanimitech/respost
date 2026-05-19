@@ -22,7 +22,7 @@ export function PostcardEnd({ writeBackTo }: Props) {
       <div
         className="t-mono"
         style={{
-          fontSize: 9.5,
+          fontSize: 11.5,
           letterSpacing: 1.8,
           color: "var(--ink-mute)",
           textTransform: "uppercase",
@@ -49,7 +49,7 @@ export function PostcardEnd({ writeBackTo }: Props) {
             color: "var(--paper-light)",
             textDecoration: "none",
             fontFamily: "inherit",
-            fontSize: 13,
+            fontSize: 15,
             fontWeight: 500,
           }}
         >
@@ -61,7 +61,7 @@ export function PostcardEnd({ writeBackTo }: Props) {
         className="t-mono"
         style={{
           marginTop: 22,
-          fontSize: 9,
+          fontSize: 11,
           color: "var(--ink-faint)",
           letterSpacing: 1,
           lineHeight: 1.6,

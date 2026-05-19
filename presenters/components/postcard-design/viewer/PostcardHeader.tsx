@@ -45,7 +45,7 @@ export function PostcardHeader({ postcard }: Props) {
           justifyContent: "center",
           fontFamily: "var(--font-serif-display), serif",
           fontWeight: 500,
-          fontSize: 13,
+          fontSize: 15,
         }}
       >
         {senderInitial(postcard.from)}
@@ -53,14 +53,14 @@ export function PostcardHeader({ postcard }: Props) {
       <div style={{ flex: 1 }}>
         <div
           className="t-serif"
-          style={{ fontSize: 15, fontWeight: 500, lineHeight: 1.1 }}
+          style={{ fontSize: 18, fontWeight: 500, lineHeight: 1.1 }}
         >
           from {postcard.from}
         </div>
         <div
           className="t-mono"
           style={{
-            fontSize: 9,
+            fontSize: 11,
             letterSpacing: 1.2,
             color: "var(--ink-mute)",
             textTransform: "uppercase",
