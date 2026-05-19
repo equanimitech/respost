@@ -51,6 +51,7 @@ export type PublishInput = {
   place?: string;
   senderLocation?: SenderLocationInput;
   title?: string;
+  brief?: string;
   summary?: string;
   cover?: DraftBlobRef;
   blocks: ReadonlyArray<DraftBlock>;
@@ -229,6 +230,7 @@ export async function publishPostcard(
       place: input.place?.trim(),
       senderLocation,
       title: input.title?.trim() || undefined,
+      brief: input.brief?.trim() || undefined,
       summary: input.summary?.trim() || undefined,
       cover: input.cover
         ? { ref: input.cover.ref.$link, mimeType: input.cover.mimeType }
@@ -261,6 +263,7 @@ export async function publishPostcard(
           }
         : undefined,
       title: command.title,
+      brief: command.brief,
       summary: command.summary,
       cover: input.cover
         ? {
