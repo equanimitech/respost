@@ -36,11 +36,11 @@ type Props = {
   blocks: ReadonlyArray<DraftBlock>;
   preview: boolean;
   onChange: (next: ReadonlyArray<DraftBlock>) => void;
+  onChangeTo: (next: string) => void;
   onChangeTitle: (next: string) => void;
   onChangeBrief: (next: string) => void;
   onChangeSummary: (next: string) => void;
   onChangeMode: (preview: boolean) => void;
-  onChangeRecipient: () => void;
   onClose?: () => void;
   onPublish: () => void;
   publishing: boolean;
@@ -112,11 +112,11 @@ export function ComposerWorkspace({
   blocks,
   preview,
   onChange,
+  onChangeTo,
   onChangeTitle,
   onChangeBrief,
   onChangeSummary,
   onChangeMode,
-  onChangeRecipient,
   onClose,
   onPublish,
   publishing,
@@ -302,9 +302,26 @@ export function ComposerWorkspace({
         >
           {t("to")}
         </div>
-        <div className="t-hand" style={{ fontSize: 19, color: "var(--ink)", lineHeight: 1 }}>
-          {to}
-        </div>
+        <input
+          type="text"
+          value={to}
+          onChange={(e) => onChangeTo(e.target.value)}
+          aria-label={t("to")}
+          maxLength={80}
+          className="t-hand"
+          style={{
+            fontSize: 19,
+            color: "var(--ink)",
+            lineHeight: 1,
+            background: "transparent",
+            border: "none",
+            outline: "none",
+            padding: 0,
+            minWidth: 80,
+            flex: "0 1 auto",
+            fontFamily: "inherit",
+          }}
+        />
         <div style={{ flex: 1 }} />
         <ToggleGroup
           type="single"
@@ -321,20 +338,6 @@ export function ComposerWorkspace({
             {tPreview("modePreview")}
           </ToggleGroupItem>
         </ToggleGroup>
-        <button
-          type="button"
-          onClick={onChangeRecipient}
-          style={{
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            color: "var(--ink-faint)",
-            fontSize: 11,
-            fontFamily: "inherit",
-          }}
-        >
-          {t("change")}
-        </button>
       </div>
 
       {/* Canvas — postcard surface */}

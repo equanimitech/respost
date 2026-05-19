@@ -278,11 +278,11 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
       blocks={blocks}
       preview={preview}
       onChange={onChangeBlocks}
+      onChangeTo={(next) => setState({ to: next })}
       onChangeTitle={(next) => setState({ title: next })}
       onChangeBrief={(next) => setState({ brief: next })}
       onChangeSummary={(next) => setState({ summary: next })}
       onChangeMode={(next) => setState({ preview: next })}
-      onChangeRecipient={() => setState({ step: "recipient" })}
       onClose={close}
       onPublish={onPublish}
       publishing={publishing}
