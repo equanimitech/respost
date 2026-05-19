@@ -32,6 +32,25 @@ const composeInputShape = {
     .max(160)
     .optional()
     .describe("Sender's place line (e.g. 'Barcelona', 'from the train')."),
+  title: z
+    .string()
+    .max(200)
+    .optional()
+    .describe("Postcard headline. Used as og:title."),
+  brief: z
+    .string()
+    .max(160)
+    .optional()
+    .describe(
+      "One-line teaser. Used on map markers and small link previews."
+    ),
+  summary: z
+    .string()
+    .max(600)
+    .optional()
+    .describe(
+      "Short summary. Used as og:description. May be AI-generated."
+    ),
   blocks: z
     .array(draftBlockSchema)
     .max(40)
