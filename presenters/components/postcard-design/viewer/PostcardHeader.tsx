@@ -1,20 +1,8 @@
-"use client";
-
 import type { Postcard } from "@/domain/types";
-import { formatDistanceToNowStrict, type Locale as DateLocale } from "date-fns";
-import { enUS, ptBR, es, fr } from "date-fns/locale";
 import { useLocale, useTranslations } from "next-intl";
-import type { Locale as AppLocale } from "@/i18n/locales";
 import { Postmark } from "../primitives/Postmark";
 
 type Props = { postcard: Postcard };
-
-const DATE_LOCALES: Record<AppLocale, DateLocale> = {
-  en: enUS,
-  pt: ptBR,
-  es,
-  fr,
-};
 
 function senderInitial(name: string): string {
   const trimmed = name.trim();
@@ -27,18 +15,31 @@ function postmarkPlace(place: string | undefined): string {
   return upper.length <= 5 ? upper : upper.slice(0, 3);
 }
 
+const ROMAN_MONTHS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"] as const;
+
 function formatDate(d: Date): string {
   const day = d.getDate();
-  const month = d.getMonth() + 1;
+  const month = d.getMonth();
   const year = d.getFullYear() % 100;
-  const romanMonth = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"][month - 1];
-  return `${day}·${romanMonth}·${year}`;
+  return `${day}·${ROMAN_MONTHS[month]}·${year}`;
+}
+
+function relativeTime(d: Date, locale: string): string {
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+  const diffMs = d.getTime() - Date.now();
+  const diffSec = Math.round(diffMs / 1000);
+  const abs = Math.abs(diffSec);
+  if (abs < 60) return rtf.format(diffSec, "second");
+  if (abs < 3600) return rtf.format(Math.round(diffSec / 60), "minute");
+  if (abs < 86400) return rtf.format(Math.round(diffSec / 3600), "hour");
+  if (abs < 2_592_000) return rtf.format(Math.round(diffSec / 86400), "day");
+  if (abs < 31_536_000) return rtf.format(Math.round(diffSec / 2_592_000), "month");
+  return rtf.format(Math.round(diffSec / 31_536_000), "year");
 }
 
 export function PostcardHeader({ postcard }: Props) {
   const t = useTranslations("viewer");
-  const locale = useLocale() as AppLocale;
-  const dateLocale = DATE_LOCALES[locale] ?? enUS;
+  const locale = useLocale();
   return (
     <div
       style={{
@@ -83,10 +84,7 @@ export function PostcardHeader({ postcard }: Props) {
           }}
         >
           {postcard.place ? t("sentFromPlace", { place: postcard.place }) : ""}
-          {formatDistanceToNowStrict(postcard.createdAt, {
-            addSuffix: true,
-            locale: dateLocale,
-          })}
+          {relativeTime(postcard.createdAt, locale)}
         </div>
       </div>
       <Postmark

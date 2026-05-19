@@ -65,6 +65,7 @@ export function Postmark({
         }}
       />
       <div
+        translate="no"
         style={{
           fontSize: size * 0.13,
           fontVariantNumeric: "tabular-nums",
