@@ -452,91 +452,93 @@ export function ComposerEditor({
           background: "var(--paper)",
           borderTop: "1px solid var(--divider)",
           display: "flex",
-          alignItems: "center",
-          gap: 6,
+          flexDirection: "column",
+          gap: 8,
           flexShrink: 0,
         }}
       >
-        <button
-          type="button"
-          onClick={() => onPickPhoto("uploaded")}
-          disabled={photoBusy}
-          style={toolBtnStyle()}
-          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-          title={t("toolbar.photo")}
-          aria-label={t("toolbar.photo")}
-        >
-          <Icon name="image" size={18} strokeWidth={1.6} />
-        </button>
-        <button
-          type="button"
-          onClick={() => openLinkPrompt("song")}
-          style={toolBtnStyle()}
-          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-          title={t("toolbar.song")}
-          aria-label={t("toolbar.song")}
-        >
-          <Icon name="music" size={18} strokeWidth={1.6} />
-        </button>
-        <button
-          type="button"
-          onClick={() => openLinkPrompt("video")}
-          style={toolBtnStyle()}
-          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-          title={t("toolbar.video")}
-          aria-label={t("toolbar.video")}
-        >
-          <Icon name="play" size={18} strokeWidth={1.6} />
-        </button>
-        <button
-          type="button"
-          onClick={() => openLinkPrompt("place")}
-          style={toolBtnStyle()}
-          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-          title={t("toolbar.place")}
-          aria-label={t("toolbar.place")}
-        >
-          <Icon name="pin" size={18} strokeWidth={1.6} />
-        </button>
-        <button
-          type="button"
-          onClick={() => openLinkPrompt("link")}
-          style={toolBtnStyle()}
-          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-          title={t("toolbar.link")}
-          aria-label={t("toolbar.link")}
-        >
-          <Icon name="edit" size={18} strokeWidth={1.6} />
-        </button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) handleAddPhoto(f, "uploaded");
-            e.target.value = "";
-          }}
-        />
-        <input
-          ref={handwritingRef}
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) handleAddPhoto(f, "handwriting");
-            e.target.value = "";
-          }}
-        />
-        <div style={{ flex: 1 }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <button
+            type="button"
+            onClick={() => onPickPhoto("uploaded")}
+            disabled={photoBusy}
+            style={toolBtnStyle()}
+            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+            title={t("toolbar.photo")}
+            aria-label={t("toolbar.photo")}
+          >
+            <Icon name="image" size={18} strokeWidth={1.6} />
+          </button>
+          <button
+            type="button"
+            onClick={() => openLinkPrompt("song")}
+            style={toolBtnStyle()}
+            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+            title={t("toolbar.song")}
+            aria-label={t("toolbar.song")}
+          >
+            <Icon name="music" size={18} strokeWidth={1.6} />
+          </button>
+          <button
+            type="button"
+            onClick={() => openLinkPrompt("video")}
+            style={toolBtnStyle()}
+            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+            title={t("toolbar.video")}
+            aria-label={t("toolbar.video")}
+          >
+            <Icon name="play" size={18} strokeWidth={1.6} />
+          </button>
+          <button
+            type="button"
+            onClick={() => openLinkPrompt("place")}
+            style={toolBtnStyle()}
+            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+            title={t("toolbar.place")}
+            aria-label={t("toolbar.place")}
+          >
+            <Icon name="pin" size={18} strokeWidth={1.6} />
+          </button>
+          <button
+            type="button"
+            onClick={() => openLinkPrompt("link")}
+            style={toolBtnStyle()}
+            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+            title={t("toolbar.link")}
+            aria-label={t("toolbar.link")}
+          >
+            <Icon name="edit" size={18} strokeWidth={1.6} />
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleAddPhoto(f, "uploaded");
+              e.target.value = "";
+            }}
+          />
+          <input
+            ref={handwritingRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleAddPhoto(f, "handwriting");
+              e.target.value = "";
+            }}
+          />
+        </div>
         <button
           type="button"
           onClick={goPreview}
           disabled={blocks.length === 0}
           style={{
-            padding: "10px 18px",
+            width: "100%",
+            padding: "12px 18px",
             borderRadius: 999,
             background: "var(--ink)",
             color: "var(--paper-light)",
@@ -547,6 +549,7 @@ export function ComposerEditor({
             fontWeight: 600,
             display: "inline-flex",
             alignItems: "center",
+            justifyContent: "center",
             gap: 5,
             opacity: blocks.length === 0 ? 0.45 : 1,
           }}
