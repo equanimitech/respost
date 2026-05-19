@@ -40,6 +40,12 @@
             "maxGraphemes": 300,
             "description": "Short summary. Used as og:description. May be human-written or AI-generated."
           },
+          "brief": {
+            "type": "string",
+            "maxLength": 160,
+            "maxGraphemes": 80,
+            "description": "One-line teaser. Used on map markers and small link cards."
+          },
           "cover": {
             "type": "blob",
             "accept": ["image/jpeg", "image/png", "image/webp"],
