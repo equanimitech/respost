@@ -65,7 +65,14 @@
       "link": "cole qualquer link"
     },
     "previewCta": "Pré-visualizar →",
-    "publishFailed": "Não foi possível publicar"
+    "publishFailed": "Não foi possível publicar",
+    "titlePlaceholder": "Título",
+    "titleAria": "Título do postal",
+    "detailsLabel": "Detalhes",
+    "briefLabel": "Resumo curto",
+    "briefPlaceholder": "Uma linha. Aparece no mapa.",
+    "summaryLabel": "Resumo",
+    "summaryPlaceholder": "Parágrafo curto para pré-visualizações."
   },
   "preview": {
     "chromeTitle": "pré-visualizar · 3/3",

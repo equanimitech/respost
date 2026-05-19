@@ -65,7 +65,14 @@
       "link": "paste any URL"
     },
     "previewCta": "Preview →",
-    "publishFailed": "Publish failed"
+    "publishFailed": "Publish failed",
+    "titlePlaceholder": "Title",
+    "titleAria": "Postcard title",
+    "detailsLabel": "Details",
+    "briefLabel": "Brief",
+    "briefPlaceholder": "One-line teaser. Shows on the map.",
+    "summaryLabel": "Summary",
+    "summaryPlaceholder": "Short paragraph for previews."
   },
   "preview": {
     "chromeTitle": "preview · 3/3",

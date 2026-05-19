@@ -30,9 +30,15 @@ import {
 
 type Props = {
   to: string;
+  title: string;
+  brief: string;
+  summary: string;
   blocks: ReadonlyArray<DraftBlock>;
   preview: boolean;
   onChange: (next: ReadonlyArray<DraftBlock>) => void;
+  onChangeTitle: (next: string) => void;
+  onChangeBrief: (next: string) => void;
+  onChangeSummary: (next: string) => void;
   onChangeMode: (preview: boolean) => void;
   onChangeRecipient: () => void;
   onClose?: () => void;
@@ -42,6 +48,29 @@ type Props = {
   resolveImageUrl?: (ref: string) => string | undefined;
   onRegisterPreviewUrl?: (refLink: string, url: string) => void;
 };
+
+function graphemeCount(s: string): number {
+  try {
+    const Seg = (Intl as unknown as {
+      Segmenter?: new (
+        ...a: unknown[]
+      ) => { segment(s: string): Iterable<unknown> };
+    }).Segmenter;
+    if (Seg) {
+      const seg = new Seg("en", { granularity: "grapheme" });
+      let n = 0;
+      for (const _ of seg.segment(s)) n++;
+      return n;
+    }
+  } catch {
+    /* fall through */
+  }
+  return s.length;
+}
+
+const TITLE_MAX = 100;
+const BRIEF_MAX = 80;
+const SUMMARY_MAX = 300;
 
 const URL_RE = /^https?:\/\/[^\s]+$/;
 
@@ -77,9 +106,15 @@ function draftToView(d: DraftBlock, idx: number): Block {
 
 export function ComposerWorkspace({
   to,
+  title,
+  brief,
+  summary,
   blocks,
   preview,
   onChange,
+  onChangeTitle,
+  onChangeBrief,
+  onChangeSummary,
   onChangeMode,
   onChangeRecipient,
   onClose,
@@ -326,6 +361,57 @@ export function ComposerWorkspace({
             ))
           ) : (
             <>
+              <div
+                style={{
+                  padding: "14px 22px 0",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => onChangeTitle(e.target.value)}
+                  placeholder={t("titlePlaceholder")}
+                  aria-label={t("titleAria")}
+                  maxLength={200}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    color: "var(--ink)",
+                    fontFamily: "inherit",
+                    fontSize: 22,
+                    fontWeight: 600,
+                    lineHeight: 1.2,
+                    padding: "4px 0",
+                    borderBottom: "1px solid transparent",
+                  }}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderBottomColor =
+                      "var(--paper-edge)")
+                  }
+                  onBlur={(e) =>
+                    (e.currentTarget.style.borderBottomColor = "transparent")
+                  }
+                />
+                {title.length > 0 && (
+                  <div
+                    style={{
+                      alignSelf: "flex-end",
+                      fontSize: 10,
+                      color:
+                        graphemeCount(title) > TITLE_MAX
+                          ? "var(--stamp-red)"
+                          : "var(--ink-faint)",
+                    }}
+                  >
+                    {graphemeCount(title)}/{TITLE_MAX}
+                  </div>
+                )}
+              </div>
               {empty && (
                 <button
                   type="button"
@@ -394,6 +480,114 @@ export function ComposerWorkspace({
             </>
           )}
         </div>
+
+        {!preview && (
+          <details
+            style={{
+              margin: "10px 22px 0",
+              fontSize: 13,
+              color: "var(--ink)",
+            }}
+          >
+            <summary
+              style={{
+                cursor: "pointer",
+                fontFamily: "inherit",
+                color: "var(--ink-mute)",
+                padding: "6px 0",
+                userSelect: "none",
+              }}
+            >
+              {t("detailsLabel")}
+            </summary>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                padding: "8px 0 4px",
+              }}
+            >
+              <label
+                style={{ display: "flex", flexDirection: "column", gap: 4 }}
+              >
+                <span style={{ fontSize: 11, color: "var(--ink-mute)" }}>
+                  {t("briefLabel")}
+                </span>
+                <textarea
+                  value={brief}
+                  onChange={(e) => onChangeBrief(e.target.value)}
+                  placeholder={t("briefPlaceholder")}
+                  rows={1}
+                  maxLength={160}
+                  style={{
+                    width: "100%",
+                    border: "1px solid var(--paper-edge)",
+                    borderRadius: 6,
+                    background: "var(--paper-light)",
+                    color: "var(--ink)",
+                    fontFamily: "inherit",
+                    fontSize: 13,
+                    lineHeight: 1.4,
+                    padding: "6px 8px",
+                    resize: "vertical",
+                  }}
+                />
+                <span
+                  style={{
+                    alignSelf: "flex-end",
+                    fontSize: 10,
+                    color:
+                      graphemeCount(brief) > BRIEF_MAX
+                        ? "var(--stamp-red)"
+                        : "var(--ink-faint)",
+                  }}
+                >
+                  {graphemeCount(brief)}/{BRIEF_MAX}
+                </span>
+              </label>
+
+              <label
+                style={{ display: "flex", flexDirection: "column", gap: 4 }}
+              >
+                <span style={{ fontSize: 11, color: "var(--ink-mute)" }}>
+                  {t("summaryLabel")}
+                </span>
+                <textarea
+                  value={summary}
+                  onChange={(e) => onChangeSummary(e.target.value)}
+                  placeholder={t("summaryPlaceholder")}
+                  rows={3}
+                  maxLength={600}
+                  style={{
+                    width: "100%",
+                    border: "1px solid var(--paper-edge)",
+                    borderRadius: 6,
+                    background: "var(--paper-light)",
+                    color: "var(--ink)",
+                    fontFamily: "inherit",
+                    fontSize: 13,
+                    lineHeight: 1.45,
+                    padding: "6px 8px",
+                    resize: "vertical",
+                  }}
+                />
+                <span
+                  style={{
+                    alignSelf: "flex-end",
+                    fontSize: 10,
+                    color:
+                      graphemeCount(summary) > SUMMARY_MAX
+                        ? "var(--stamp-red)"
+                        : "var(--ink-faint)",
+                  }}
+                >
+                  {graphemeCount(summary)}/{SUMMARY_MAX}
+                </span>
+              </label>
+            </div>
+          </details>
+        )}
 
         {photoError && !preview && (
           <div

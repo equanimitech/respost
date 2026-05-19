@@ -65,7 +65,14 @@
       "link": "collez n'importe quel lien"
     },
     "previewCta": "Aperçu →",
-    "publishFailed": "La publication a échoué"
+    "publishFailed": "La publication a échoué",
+    "titlePlaceholder": "Titre",
+    "titleAria": "Titre de la carte",
+    "detailsLabel": "Détails",
+    "briefLabel": "Accroche",
+    "briefPlaceholder": "Une ligne. S'affiche sur la carte.",
+    "summaryLabel": "Résumé",
+    "summaryPlaceholder": "Court paragraphe pour les aperçus."
   },
   "preview": {
     "chromeTitle": "aperçu · 3/3",

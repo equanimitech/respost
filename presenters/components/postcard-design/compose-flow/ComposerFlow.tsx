@@ -38,6 +38,9 @@ const composerParsers = {
   to: parseAsString.withDefault(""),
   from: parseAsString.withDefault(""),
   place: parseAsString.withDefault(""),
+  title: parseAsString.withDefault(""),
+  brief: parseAsString.withDefault(""),
+  summary: parseAsString.withDefault(""),
   step: parseAsStringEnum<Step>([...STEPS]).withDefault("recipient"),
   preview: parseAsBoolean.withDefault(false),
   blocks: blocksParser,
@@ -94,12 +97,18 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
             to: decoded.to,
             from: decoded.from ?? defaultSender,
             place: decoded.place ?? defaultPlace,
+            title: decoded.title,
+            brief: decoded.brief,
+            summary: decoded.summary,
             blocks: decoded.blocks ?? [],
           });
           draftIdRef.current = created.id;
           patch.to = created.to;
           patch.from = created.from;
           patch.place = created.place;
+          patch.title = created.title;
+          patch.brief = created.brief;
+          patch.summary = created.summary;
           patch.blocks = created.blocks;
           patch.draft = created.id;
           if (created.to) patch.step = "editor";
@@ -112,6 +121,9 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
           patch.to = loaded.to;
           patch.from = loaded.from;
           patch.place = loaded.place;
+          patch.title = loaded.title ?? "";
+          patch.brief = loaded.brief ?? "";
+          patch.summary = loaded.summary ?? "";
           patch.blocks = loaded.blocks;
           if (loaded.to && state.step === "recipient") patch.step = "editor";
         } else {
@@ -155,6 +167,9 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
         to: state.to,
         from: state.from,
         place: state.place,
+        title: state.title,
+        brief: state.brief,
+        summary: state.summary,
         blocks: state.blocks,
       });
       draftIdRef.current = created.id;
@@ -164,16 +179,32 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
         to: state.to,
         from: state.from,
         place: state.place,
+        title: state.title,
+        brief: state.brief,
+        summary: state.summary,
         blocks: state.blocks,
       });
     }
-  }, [hydrated, state.to, state.from, state.place, state.blocks, setState]);
+  }, [
+    hydrated,
+    state.to,
+    state.from,
+    state.place,
+    state.title,
+    state.brief,
+    state.summary,
+    state.blocks,
+    setState,
+  ]);
 
   const clearDraft = () =>
     setState({
       to: "",
       from: "",
       place: "",
+      title: "",
+      brief: "",
+      summary: "",
       step: "recipient",
       preview: false,
       blocks: [],
@@ -200,6 +231,9 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
         to,
         from: state.from,
         place: state.place || undefined,
+        title: state.title || undefined,
+        brief: state.brief || undefined,
+        summary: state.summary || undefined,
         blocks,
       });
       if (result.success === true) {
@@ -238,9 +272,15 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
   return (
     <ComposerWorkspace
       to={to}
+      title={state.title}
+      brief={state.brief}
+      summary={state.summary}
       blocks={blocks}
       preview={preview}
       onChange={onChangeBlocks}
+      onChangeTitle={(next) => setState({ title: next })}
+      onChangeBrief={(next) => setState({ brief: next })}
+      onChangeSummary={(next) => setState({ summary: next })}
       onChangeMode={(next) => setState({ preview: next })}
       onChangeRecipient={() => setState({ step: "recipient" })}
       onClose={close}
