@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ComposerChrome } from "./ComposerChrome";
 
@@ -19,11 +19,6 @@ export function ComposerRecipient({
 }: Props) {
   const t = useTranslations("recipient");
   const [value, setValue] = useState(initialValue);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
 
   const submit = () => {
     const trimmed = value.trim();
@@ -51,7 +46,8 @@ export function ComposerRecipient({
         </div>
 
         <div style={{ marginTop: 40, position: "relative" }}>
-          <div
+          <label
+            htmlFor="composer-to"
             className="t-mono"
             style={{
               fontSize: 9,
@@ -59,10 +55,11 @@ export function ComposerRecipient({
               color: "var(--ink-mute)",
               textTransform: "uppercase",
               marginBottom: 4,
+              display: "block",
             }}
           >
             {t("label")}
-          </div>
+          </label>
           <div
             style={{
               padding: "6px 0 12px",
@@ -70,7 +67,10 @@ export function ComposerRecipient({
             }}
           >
             <input
-              ref={inputRef}
+              id="composer-to"
+              name="to"
+              autoComplete="off"
+              spellCheck={false}
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onKeyDown={(e) => {

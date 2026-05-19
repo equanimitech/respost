@@ -320,6 +320,8 @@ export function ComposerEditor({
 
         {photoError && (
           <div
+            role="alert"
+            aria-live="polite"
             style={{
               margin: "0 22px 12px",
               padding: "8px 12px",
@@ -460,6 +462,7 @@ export function ComposerEditor({
           onClick={() => onPickPhoto("uploaded")}
           disabled={photoBusy}
           style={toolBtnStyle()}
+          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
           title={t("toolbar.photo")}
           aria-label={t("toolbar.photo")}
         >
@@ -469,6 +472,7 @@ export function ComposerEditor({
           type="button"
           onClick={() => openLinkPrompt("song")}
           style={toolBtnStyle()}
+          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
           title={t("toolbar.song")}
           aria-label={t("toolbar.song")}
         >
@@ -478,6 +482,7 @@ export function ComposerEditor({
           type="button"
           onClick={() => openLinkPrompt("video")}
           style={toolBtnStyle()}
+          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
           title={t("toolbar.video")}
           aria-label={t("toolbar.video")}
         >
@@ -487,6 +492,7 @@ export function ComposerEditor({
           type="button"
           onClick={() => openLinkPrompt("place")}
           style={toolBtnStyle()}
+          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
           title={t("toolbar.place")}
           aria-label={t("toolbar.place")}
         >
@@ -496,6 +502,7 @@ export function ComposerEditor({
           type="button"
           onClick={() => openLinkPrompt("link")}
           style={toolBtnStyle()}
+          className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
           title={t("toolbar.link")}
           aria-label={t("toolbar.link")}
         >
