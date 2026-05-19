@@ -38,22 +38,6 @@ export function ModalBackdrop() {
           r:p
         </Stamp>
       </div>
-      <div
-        className="t-mono"
-        style={{
-          position: "absolute",
-          top: 100,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontSize: 9,
-          letterSpacing: 1.8,
-          color: "rgba(246,241,231,.5)",
-          textTransform: "uppercase",
-        }}
-      >
-        swipe down to tuck back inside
-      </div>
     </div>
   );
 }
