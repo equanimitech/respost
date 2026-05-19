@@ -18,7 +18,7 @@ Each postcard is now a small **block-structured document**: paragraphs of markdo
 
 1. Open `/compose`.
 2. Step 1 — write a name on the envelope ("mãe", "you in 10 years", "future me").
-3. Step 2 — write. Photos, links, paragraphs in any order. Any URL unfurls: Spotify track, YouTube video, Google Maps place, an article. Take a photo of a handwritten note and it lands on paper-toned card.
+3. Step 2 — write. Photos, paragraphs, links in any order. Type `/` in the editor (or tap a toolbar button) to drop a **song** (Spotify / SoundCloud), **video** (YouTube), **place** (Google Maps) or generic **link** — paste the URL, Respost fetches the metadata. Take a photo of a handwritten note and it lands on paper-toned card.
 4. Step 3 — preview exactly what the recipient will see.
 5. Tap **Share the link**. The link is yours; hand it off via the native share sheet (WhatsApp is the first chip).
 

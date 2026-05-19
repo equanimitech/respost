@@ -13,7 +13,7 @@ import {
   type SlashCommandsMenuHandle,
 } from "./SlashCommandsMenu";
 
-const SLASH_COMMANDS: readonly SlashCommandItem[] = [
+const FORMAT_COMMANDS: readonly SlashCommandItem[] = [
   {
     title: "Bullet list",
     description: "Unordered list",
@@ -58,10 +58,13 @@ const SLASH_COMMANDS: readonly SlashCommandItem[] = [
   },
 ];
 
-function filterItems(query: string): SlashCommandItem[] {
-  if (!query) return [...SLASH_COMMANDS];
+function filterItems(
+  items: readonly SlashCommandItem[],
+  query: string
+): SlashCommandItem[] {
+  if (!query) return [...items];
   const q = query.toLowerCase();
-  return SLASH_COMMANDS.filter((item) => {
+  return items.filter((item) => {
     if (item.title.toLowerCase().includes(q)) return true;
     return item.keywords?.some((k) => k.toLowerCase().includes(q)) ?? false;
   });
@@ -126,6 +129,7 @@ function suggestionRenderer(): SuggestionOptions["render"] {
 }
 
 type SlashOptions = {
+  extraItems: readonly SlashCommandItem[];
   suggestion: Omit<SuggestionOptions, "editor">;
 };
 
@@ -133,6 +137,7 @@ export const SlashCommands = Extension.create<SlashOptions>({
   name: "slashCommands",
   addOptions() {
     return {
+      extraItems: [],
       suggestion: {
         char: "/",
         startOfLine: false,
@@ -146,16 +151,20 @@ export const SlashCommands = Extension.create<SlashOptions>({
           range: { from: number; to: number };
           props: SlashCommandItem;
         }) => props.command({ editor, range }),
-        items: ({ query }: { query: string }) => filterItems(query),
+        items: ({ query }: { query: string }) =>
+          filterItems(FORMAT_COMMANDS, query),
         render: suggestionRenderer(),
       },
     };
   },
   addProseMirrorPlugins() {
+    const extra = this.options.extraItems;
     return [
       Suggestion({
         editor: this.editor,
         ...this.options.suggestion,
+        items: ({ query }: { query: string }) =>
+          filterItems([...extra, ...FORMAT_COMMANDS], query),
       }),
     ];
   },

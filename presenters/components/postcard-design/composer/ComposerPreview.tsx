@@ -74,7 +74,7 @@ export function ComposerPreview({
             marginTop: 4,
           }}
         >
-          scroll through · everything is unfurled
+          scroll through · this is what arrives
         </div>
       </div>
 

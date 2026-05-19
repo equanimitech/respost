@@ -6,12 +6,14 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { Markdown, type MarkdownStorage } from "tiptap-markdown";
 import { useEffect, useRef } from "react";
 import { SlashCommands } from "./slashCommands";
+import type { SlashCommandItem } from "./SlashCommandsMenu";
 
 type Props = {
   value: string;
   onChange: (markdown: string) => void;
   placeholder?: string;
   autoFocus?: boolean;
+  extraSlashItems?: readonly SlashCommandItem[];
 };
 
 export function TiptapProseEditor({
@@ -19,6 +21,7 @@ export function TiptapProseEditor({
   onChange,
   placeholder,
   autoFocus,
+  extraSlashItems,
 }: Props) {
   const lastEmittedRef = useRef(value);
 
@@ -33,7 +36,9 @@ export function TiptapProseEditor({
       Placeholder.configure({
         placeholder: placeholder ?? "",
       }),
-      SlashCommands,
+      SlashCommands.configure({
+        extraItems: extraSlashItems ?? [],
+      }),
       Markdown.configure({
         html: false,
         tightLists: true,
