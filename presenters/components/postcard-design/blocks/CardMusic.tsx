@@ -1,4 +1,5 @@
 import type { MusicBlock } from "@/domain/types";
+import { cn } from "@/presenters/lib/utils";
 import { OGCard, SERVICE_LABELS } from "./OGCard";
 
 const GRADIENTS: Record<string, string> = {
@@ -13,86 +14,67 @@ type Props = { block: MusicBlock; rot?: number };
 export function CardMusic({ block, rot }: Props) {
   const s = SERVICE_LABELS[block.service];
   const gradient = GRADIENTS[block.tone ?? "a"];
+  const meta = [block.artist, block.album].filter(Boolean).join(" · ");
   return (
     <OGCard host={s.label} hostDot={s.dot} rot={rot}>
-      <div style={{ padding: 12, display: "flex", gap: 12, alignItems: "center" }}>
+      <div className={cn("flex items-center gap-3.5 p-3.5 @md:gap-5 @md:p-5")}>
         <div
-          style={{
-            width: 60,
-            height: 60,
-            flexShrink: 0,
-            background: gradient,
-            position: "relative",
-          }}
+          className={cn(
+            "relative size-16 shrink-0 rounded-sm @md:size-20",
+            "shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_1px_2px_rgb(0_0_0/0.18)]",
+          )}
+          style={{ background: gradient }}
         >
           <div
-            style={{
-              position: "absolute",
-              inset: "50% 50% auto auto",
-              width: 22,
-              height: 22,
-              borderRadius: "50%",
-              background: "var(--paper-light)",
-              transform: "translate(50%, -50%)",
-              border: "4px double rgba(60,40,20,.18)",
-            }}
+            className={cn(
+              "absolute left-1/2 top-1/2 size-5.5 -translate-x-1/2 -translate-y-1/2",
+              "rounded-pill border-4 border-double bg-paper-light @md:size-7",
+            )}
+            style={{ borderColor: "rgba(60,40,20,.18)" }}
           />
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className={cn("min-w-0 flex-1")}>
           <div
-            className="t-serif"
-            style={{
-              fontSize: 14,
-              fontWeight: 500,
-              lineHeight: 1.2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
+            className={cn(
+              "t-sans truncate text-footnote font-semibold leading-tight tracking-tight text-ink",
+              "@md:text-body",
+            )}
           >
             {block.title}
           </div>
-          <div
-            style={{
-              fontSize: 11.5,
-              color: "var(--ink-mute)",
-              marginTop: 2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {[block.artist, block.album].filter(Boolean).join(" · ")}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
+          {meta && (
             <div
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
-                background: "var(--ink)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
+              className={cn(
+                "t-sans mt-0.5 truncate text-caption text-ink-mute",
+                "@md:text-footnote",
+              )}
             >
-              <svg width="8" height="8" viewBox="0 0 12 12">
-                <path d="M3.5 2L10 6 3.5 10z" fill="var(--paper-light)" />
-              </svg>
+              {meta}
             </div>
+          )}
+          <div className={cn("mt-2.5 flex items-center gap-2")}>
             <a
               href={block.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="t-mono"
-              style={{
-                fontSize: 10,
-                color: "var(--ink-mute)",
-                textDecoration: "none",
-              }}
+              className={cn(
+                "t-sans inline-flex items-center gap-1.5 rounded-pill",
+                "border border-paper-edge bg-paper py-1 pl-1.5 pr-2.5",
+                "text-caption font-medium text-ink-soft no-underline",
+                "@md:text-footnote",
+              )}
             >
-              {block.dur ? `${block.dur} · ` : ""}open in {s.label.toLowerCase()}
+              <span
+                className={cn(
+                  "inline-flex size-4 shrink-0 items-center justify-center rounded-pill bg-ink",
+                  "@md:size-5",
+                )}
+              >
+                <svg width="7" height="7" viewBox="0 0 12 12" aria-hidden>
+                  <path d="M3.5 2L10 6 3.5 10z" fill="var(--paper-light)" />
+                </svg>
+              </span>
+              {block.dur ? `${block.dur} · ` : ""}open
             </a>
           </div>
         </div>

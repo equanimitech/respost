@@ -1,11 +1,13 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { PhotoKind } from "@/domain/types";
+import { cn } from "@/presenters/lib/utils";
 
 type PhotoProps = {
   kind?: PhotoKind;
   src?: string;
   alt?: string;
   children?: ReactNode;
+  className?: string;
   style?: CSSProperties;
   label?: string;
   fit?: "cover" | "contain";
@@ -29,6 +31,7 @@ export function Photo({
   src,
   alt = "",
   children,
+  className,
   style,
   label,
   fit = "cover",
@@ -41,12 +44,8 @@ export function Photo({
 
   return (
     <div
-      className={placeholderClass}
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        ...style,
-      }}
+      className={cn("relative overflow-hidden", placeholderClass, className)}
+      style={style}
     >
       {src ? (
         <img

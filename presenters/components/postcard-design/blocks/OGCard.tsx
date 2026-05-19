@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { cn } from "@/presenters/lib/utils";
 
 type OGCardProps = {
   host: string;
@@ -8,48 +9,39 @@ type OGCardProps = {
   children: ReactNode;
 };
 
+// OGCard — paper-on-paper embed surface used by music / video / place /
+// article cards. Outer wrapper keeps the floating "host" pill visible
+// outside the rounded edge; an inner wrapper clips child media to the
+// card's radius without hiding the pill.
 export function OGCard({ host, hostDot, rot = 0.5, style, children }: OGCardProps) {
   return (
     <div
-      style={{
-        margin: "14px 22px",
-        background: "var(--paper-light)",
-        boxShadow: "var(--sh-card)",
-        transform: `rotate(${rot}deg)`,
-        position: "relative",
-        ...style,
-      }}
+      className={cn("relative mx-6 my-4")}
+      style={{ transform: `rotate(${rot}deg)`, ...style }}
     >
       <div
-        className="t-mono"
-        style={{
-          position: "absolute",
-          top: -10,
-          left: 14,
-          fontSize: 9,
-          color: "var(--ink-mute)",
-          letterSpacing: 1.5,
-          textTransform: "uppercase",
-          background: "var(--paper)",
-          padding: "2px 6px",
-          display: "flex",
-          alignItems: "center",
-          gap: 5,
-        }}
+        className={cn(
+          "t-mono absolute -top-2.5 left-3 z-10 flex items-center gap-1.5",
+          "rounded-pill border border-paper-edge bg-paper px-2 py-0.5",
+          "text-caption2 uppercase leading-none tracking-widest text-ink-mute",
+        )}
       >
         {hostDot && (
           <span
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: "50%",
-              background: hostDot,
-            }}
+            className={cn("size-1.5 rounded-pill")}
+            style={{ background: hostDot }}
           />
         )}
         {host}
       </div>
-      {children}
+      <div
+        className={cn(
+          "@container overflow-hidden rounded-md border border-paper-edge",
+          "bg-paper-light shadow-card",
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { ArticleBlock } from "@/domain/types";
+import { cn } from "@/presenters/lib/utils";
 import { Photo } from "../primitives/Photo";
 import { OGCard } from "./OGCard";
 
@@ -11,28 +12,33 @@ export function CardArticle({ block, rot = -0.4 }: Props) {
         href={block.url}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: "flex", color: "inherit", textDecoration: "none" }}
+        className={cn("flex text-inherit no-underline")}
       >
         <Photo
           kind={block.imageKind ?? "window"}
           src={block.imageUrl}
-          style={{ width: 96, height: 96, flexShrink: 0 }}
+          className={cn("size-26 shrink-0 @md:size-32")}
         />
-        <div style={{ padding: "10px 12px", flex: 1, minWidth: 0 }}>
+        <div
+          className={cn(
+            "flex min-w-0 flex-1 flex-col justify-center gap-1",
+            "px-3.5 py-3 @md:px-5 @md:py-4",
+          )}
+        >
           <div
-            className="t-serif"
-            style={{ fontSize: 13.5, fontWeight: 500, lineHeight: 1.25 }}
+            className={cn(
+              "t-sans line-clamp-2 text-footnote font-semibold leading-snug",
+              "tracking-tight text-ink @md:text-body",
+            )}
           >
             {block.title}
           </div>
           {block.excerpt && (
             <div
-              style={{
-                fontSize: 11,
-                color: "var(--ink-mute)",
-                marginTop: 4,
-                lineHeight: 1.4,
-              }}
+              className={cn(
+                "t-sans line-clamp-2 text-caption leading-snug text-ink-mute",
+                "@md:text-footnote",
+              )}
             >
               {block.excerpt}
             </div>

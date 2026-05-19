@@ -1,4 +1,5 @@
 import type { PlaceBlock } from "@/domain/types";
+import { cn } from "@/presenters/lib/utils";
 import { MiniMap } from "../primitives/MiniMap";
 import { RealMiniMap } from "../primitives/RealMiniMap";
 import { OGCard, SERVICE_LABELS } from "./OGCard";
@@ -14,7 +15,7 @@ export function CardPlace({ block, rot = -0.6 }: Props) {
         href={block.url}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: "block", color: "inherit", textDecoration: "none" }}
+        className={cn("block text-inherit no-underline")}
       >
         {hasCoords ? (
           <RealMiniMap
@@ -26,30 +27,31 @@ export function CardPlace({ block, rot = -0.6 }: Props) {
         ) : (
           <MiniMap w={340} h={140} pin={{ x: 0.55, y: 0.45 }} />
         )}
-        <div style={{ padding: "12px 14px 14px" }}>
-          <div className="t-serif" style={{ fontSize: 15, fontWeight: 500 }}>
+        <div className={cn("px-3.5 pt-3 pb-3.5 @md:px-5 @md:pt-4 @md:pb-5")}>
+          <div
+            className={cn(
+              "t-sans text-body font-semibold leading-tight tracking-tight text-ink",
+              "@md:text-callout",
+            )}
+          >
             {block.name}
           </div>
           {block.addr && (
             <div
-              style={{
-                fontSize: 12,
-                color: "var(--ink-mute)",
-                marginTop: 2,
-              }}
+              className={cn(
+                "t-sans mt-1 text-footnote leading-snug text-ink-mute",
+                "@md:text-body",
+              )}
             >
               {block.addr}
             </div>
           )}
           {block.caption && (
             <div
-              className="t-hand"
-              style={{
-                fontSize: 17,
-                color: "var(--terra-deep)",
-                marginTop: 8,
-                lineHeight: 1.2,
-              }}
+              className={cn(
+                "t-hand mt-2.5 text-callout leading-tight text-terra-deep",
+                "@md:text-title3",
+              )}
             >
               {block.caption}
             </div>
