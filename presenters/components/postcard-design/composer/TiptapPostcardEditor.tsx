@@ -68,7 +68,7 @@ export function TiptapPostcardEditor({
   autoFocus,
   handleRef,
 }: Props) {
-  const lastEmittedRef = useRef<string>(blocksKey(value));
+  const lastEmittedRef = useRef<string>(blocksKey([]));
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
 
@@ -114,7 +114,7 @@ export function TiptapPostcardEditor({
     if (key === lastEmittedRef.current) return;
     lastEmittedRef.current = key;
     const md = markdownStorage(editor);
-    const doc = draftBlocksToDocJson(value, md.parser);
+    const doc = draftBlocksToDocJson(value, md.parser, editor.schema);
     editor.commands.setContent(doc, { emitUpdate: false });
   }, [value, editor]);
 
@@ -155,7 +155,7 @@ export function TiptapPostcardEditor({
 }
 
 type MarkdownStorageShape = {
-  parser: { parse: (md: string) => PMNode };
+  parser: { parse: (md: string) => string };
   serializer: { serialize: (n: PMNode) => string };
 };
 
