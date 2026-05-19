@@ -69,20 +69,39 @@ export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
       }
       // Add markers for each postcard
       for (const marker of markers) {
-        const el = document.createElement("div");
+        const el = document.createElement("button");
+        el.type = "button";
         el.className = "postcard-marker";
+        el.setAttribute(
+          "aria-label",
+          `Postcard${marker.title ? ": " + marker.title : ""}`,
+        );
         el.style.width = "14px";
         el.style.height = "14px";
+        el.style.padding = "0";
         el.style.borderRadius = "50%";
         el.style.backgroundColor = "#e07a5f";
         el.style.border = "2px solid #fff";
         el.style.boxShadow = "0 1px 4px rgba(0,0,0,0.2)";
         el.style.cursor = "pointer";
+        el.style.transition = "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)";
+        el.addEventListener("mouseenter", () => {
+          el.style.transform = "scale(1.25)";
+        });
+        el.addEventListener("mouseleave", () => {
+          el.style.transform = "scale(1)";
+        });
+        el.addEventListener("focus", () => {
+          el.style.outline = "2px solid #4a6378";
+          el.style.outlineOffset = "2px";
+        });
+        el.addEventListener("blur", () => {
+          el.style.outline = "none";
+        });
 
-        // Fade based on age — newer = brighter
         const ageMs = Date.now() - marker.createdAt.getTime();
         const ageDays = ageMs / (1000 * 60 * 60 * 24);
-        const opacity = Math.max(0.3, 1 - ageDays / 30); // fade over 30 days
+        const opacity = Math.max(0.3, 1 - ageDays / 30);
         el.style.opacity = String(opacity);
 
         const title = marker.title ? escapeHtml(marker.title) : popupFallback;
@@ -129,6 +148,11 @@ export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
   }, [markers, hrefBase, popupFallback, viewLabel, dateLocale]);
 
   return (
-    <div ref={mapContainer} className="h-full w-full" />
+    <div
+      ref={mapContainer}
+      role="region"
+      aria-label="Map of postcards"
+      className="h-full w-full"
+    />
   );
 }

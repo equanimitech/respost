@@ -55,20 +55,24 @@ export default async function MapPage({ searchParams }: MapPageProps) {
       <PostcardMap markers={markers} hrefBase={hrefBase} />
       <Link
         href="/"
+        className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
         style={{
           position: "absolute",
           top: 14,
           left: 14,
           padding: "8px 14px",
-          background: "var(--paper)",
+          background: "rgba(246, 241, 231, 0.72)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          WebkitBackdropFilter: "blur(20px) saturate(180%)",
           color: "var(--ink)",
           textDecoration: "none",
           borderRadius: 999,
           fontSize: 13,
-          fontFamily: "var(--font-mono), monospace",
+          fontFamily: "var(--font-mono)",
           letterSpacing: 1,
           textTransform: "uppercase",
           boxShadow: "var(--sh-card)",
+          border: "1px solid rgba(60, 40, 20, 0.08)",
         }}
       >
         {t("home")}
@@ -81,13 +85,16 @@ export default async function MapPage({ searchParams }: MapPageProps) {
             bottom: 14,
             left: 14,
             padding: "6px 12px",
-            background: "var(--paper)",
+            background: "rgba(246, 241, 231, 0.72)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
             color: "var(--ink-mute)",
             borderRadius: 999,
             fontSize: 9,
             letterSpacing: 1.6,
             textTransform: "uppercase",
             boxShadow: "var(--sh-card)",
+            border: "1px solid rgba(60, 40, 20, 0.08)",
           }}
         >
           {t("localFakeCount", { count: markers.length })}
