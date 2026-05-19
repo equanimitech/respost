@@ -19,6 +19,7 @@ const MAX_RECIPIENT_GRAPHEMES = 40;
 const MAX_SENDER_GRAPHEMES = 40;
 const MAX_PLACE_GRAPHEMES = 80;
 const MAX_TITLE_GRAPHEMES = 100;
+const MAX_BRIEF_GRAPHEMES = 80;
 const MAX_SUMMARY_GRAPHEMES = 300;
 const MAX_MD_GRAPHEMES = 2000;
 const MAX_CAPTION_GRAPHEMES = 80;
@@ -97,6 +98,17 @@ export function validateTitle(title: string | undefined): ValidationResult {
     return {
       valid: false,
       error: `Title must be ${MAX_TITLE_GRAPHEMES} characters or less`,
+    };
+  }
+  return { valid: true };
+}
+
+export function validateBrief(brief: string | undefined): ValidationResult {
+  if (brief === undefined || brief.trim().length === 0) return { valid: true };
+  if (graphemes(brief) > MAX_BRIEF_GRAPHEMES) {
+    return {
+      valid: false,
+      error: `Brief must be ${MAX_BRIEF_GRAPHEMES} characters or less`,
     };
   }
   return { valid: true };
@@ -228,6 +240,9 @@ export function validatePostcard(
 
   const title = validateTitle(command.title);
   if (title.valid === false) return title;
+
+  const brief = validateBrief(command.brief);
+  if (brief.valid === false) return brief;
 
   const summary = validateSummary(command.summary);
   if (summary.valid === false) return summary;
