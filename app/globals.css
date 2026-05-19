@@ -201,10 +201,10 @@
   --color-inkblue-deep:var(--inkblue-deep);
   --color-olive:       var(--olive);
   --color-stamp-red:   var(--stamp-red);
-  --font-sans:         var(--font-sans-display);
-  --font-serif:        var(--font-serif-display);
-  --font-hand:         var(--font-hand);
-  --font-mono:         var(--font-mono);
+  --font-sans:  -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --font-serif: var(--font-serif-display);
+  --font-hand:  var(--font-hand);
+  --font-mono:  ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -238,20 +238,41 @@
  * Type families — wired to next/font CSS variables (set in layout.tsx)
  * ──────────────────────────────────────────────────────────────── */
 
-.t-sans   { font-family: var(--font-sans-display), ui-sans-serif, system-ui, -apple-system, sans-serif; }
+.t-sans   { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif; }
 .t-serif  { font-family: var(--font-serif-display), "Iowan Old Style", Georgia, serif; }
 .t-hand   { font-family: var(--font-hand), "Bradley Hand", cursive; }
-.t-mono   { font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace; }
+.t-mono   { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 
 /* ─────────────────────────────────────────────────────────────────
  * Layout primitives
  * ──────────────────────────────────────────────────────────────── */
 
+/* ─────────────────────────────────────────────────────────────────
+ * Type scale — Apple-style hierarchy, 9 sizes, tabular-nums for digits.
+ * ──────────────────────────────────────────────────────────────── */
+:root {
+  --text-caption2:  10px;
+  --text-caption:   11px;
+  --text-footnote:  13px;
+  --text-body:      15px;
+  --text-callout:   17px;
+  --text-title3:    20px;
+  --text-title2:    24px;
+  --text-title1:    28px;
+  --text-display:   34px;
+
+  --lh-tight:  1.15;
+  --lh-snug:   1.3;
+  --lh-normal: 1.5;
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
+
 .app {
   width: 100%; height: 100%;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans-display), system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   display: flex; flex-direction: column;
   position: relative;
@@ -323,8 +344,6 @@
  * Animations
  * ──────────────────────────────────────────────────────────────── */
 
-@keyframes rp-caret { 50% { opacity: 0; } }
-
 /* ─────────────────────────────────────────────────────────────────
  * Base
  * ──────────────────────────────────────────────────────────────── */
@@ -336,7 +355,7 @@ html, body {
 }
 
 body {
-  font-family: var(--font-sans-display), system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -446,4 +465,16 @@ body {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Reduced motion — disable non-essential animations.
+ * ──────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
