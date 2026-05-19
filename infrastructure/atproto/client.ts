@@ -119,6 +119,7 @@ export type PostcardRecord = {
   place?: string;
   senderLocation?: LocationField;
   title?: string;
+  brief?: string;
   summary?: string;
   cover?: CoverBlob;
   blocks: ReadonlyArray<BlockRecord>;
