@@ -60,6 +60,7 @@ export function buildFormatCommands(
       title: labels.title,
       description: labels.description,
       keywords: [...FORMAT_COMMAND_KEYWORDS[kind]],
+      group: "format",
       command: FORMAT_COMMAND_ACTIONS[kind],
     } satisfies SlashCommandItem;
   });
@@ -84,12 +85,30 @@ function suggestionRenderer(): SuggestionOptions["render"] {
     let renderer: Renderer | null = null;
     let popup: HTMLDivElement | null = null;
 
+    // Position relative to caret rect with floating-ui style flip + shift:
+    // flip above when the popup would overflow the viewport bottom; clamp
+    // horizontally so it stays inside the viewport.
     const positionPopup = (rect: DOMRect | null) => {
       if (!popup || !rect) return;
       popup.style.position = "fixed";
-      popup.style.top = `${rect.bottom + 6}px`;
-      popup.style.left = `${rect.left}px`;
       popup.style.zIndex = "60";
+      // Render off-screen first to measure, then place.
+      popup.style.visibility = "hidden";
+      popup.style.top = "0px";
+      popup.style.left = "0px";
+      const { offsetWidth: w, offsetHeight: h } = popup;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const margin = 6;
+      const spaceBelow = vh - rect.bottom;
+      const flipAbove = spaceBelow < h + margin && rect.top > spaceBelow;
+      const top = flipAbove
+        ? Math.max(margin, rect.top - h - margin)
+        : rect.bottom + margin;
+      const left = Math.max(margin, Math.min(rect.left, vw - w - margin));
+      popup.style.top = `${top}px`;
+      popup.style.left = `${left}px`;
+      popup.style.visibility = "visible";
     };
 
     return {

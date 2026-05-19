@@ -122,7 +122,15 @@
     "link": { "title": "Link", "description": "Paste any web link" }
   },
   "slashMenu": {
-    "noMatches": "No matches."
+    "noMatches": "No matches.",
+    "groups": {
+      "media": "Media",
+      "format": "Format"
+    }
+  },
+  "bubbleMenu": {
+    "bold": "Bold",
+    "italic": "Italic"
   },
   "map": {
     "home": "← home",

@@ -122,7 +122,15 @@
     "link": { "title": "Link", "description": "Pegá cualquier link" }
   },
   "slashMenu": {
-    "noMatches": "Sin resultados."
+    "noMatches": "Sin resultados.",
+    "groups": {
+      "media": "Multimedia",
+      "format": "Formato"
+    }
+  },
+  "bubbleMenu": {
+    "bold": "Negrita",
+    "italic": "Cursiva"
   },
   "map": {
     "home": "← inicio",

@@ -37,6 +37,8 @@ import {
   EditorBlockContext,
   type EditorBlockCtx,
 } from "./nodes/EditorBlockContext";
+import { BubbleMenu } from "./BubbleMenu";
+import { useTranslations } from "next-intl";
 
 export type TiptapPostcardEditorHandle = {
   insertPhoto: (photo: DraftPhotoBlock) => void;
@@ -145,10 +147,17 @@ export function TiptapPostcardEditor({
     [resolveImageUrl, removeAriaLabel]
   );
 
+  const tBubble = useTranslations("bubbleMenu");
+
   return (
     <EditorBlockContext.Provider value={ctx}>
       <div className="tiptap-prose">
         <EditorContent editor={editor} />
+        <BubbleMenu
+          editor={editor}
+          boldLabel={tBubble("bold")}
+          italicLabel={tBubble("italic")}
+        />
       </div>
     </EditorBlockContext.Provider>
   );

@@ -19,7 +19,9 @@ export type IconName =
   | "inbox"
   | "paper"
   | "play"
-  | "flip";
+  | "flip"
+  | "bold"
+  | "italic";
 
 const PATHS: Record<IconName, string> = {
   plus: "M12 5v14M5 12h14",
@@ -43,6 +45,8 @@ const PATHS: Record<IconName, string> = {
   paper: "M19 21H5V3h10l4 4v14z M14 3v5h5",
   play: "M6 4l14 8L6 20z",
   flip: "M3 12h18M3 12l4-4M3 12l4 4",
+  bold: "M7 5h6a3 3 0 010 6H7z M7 11h7a3 3 0 010 6H7z",
+  italic: "M14 5h6 M4 19h6 M15 5l-6 14",
 };
 
 type IconProps = {

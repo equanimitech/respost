@@ -147,6 +147,7 @@ export function ComposerEditor({
         title: tSlash("song.title"),
         description: tSlash("song.description"),
         keywords: ["song", "music", "spotify", "soundcloud", "track"],
+        group: "media",
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
           openLinkPromptRef.current("song");
@@ -156,6 +157,7 @@ export function ComposerEditor({
         title: tSlash("video.title"),
         description: tSlash("video.description"),
         keywords: ["video", "youtube", "yt", "clip"],
+        group: "media",
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
           openLinkPromptRef.current("video");
@@ -165,6 +167,7 @@ export function ComposerEditor({
         title: tSlash("place.title"),
         description: tSlash("place.description"),
         keywords: ["place", "map", "maps", "location", "pin"],
+        group: "media",
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
           openLinkPromptRef.current("place");
@@ -174,6 +177,7 @@ export function ComposerEditor({
         title: tSlash("link.title"),
         description: tSlash("link.description"),
         keywords: ["link", "article", "url", "web", "page"],
+        group: "media",
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).run();
           openLinkPromptRef.current("link");

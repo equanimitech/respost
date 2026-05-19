@@ -122,7 +122,15 @@
     "link": { "title": "Lien", "description": "Collez n'importe quel lien web" }
   },
   "slashMenu": {
-    "noMatches": "Aucun résultat."
+    "noMatches": "Aucun résultat.",
+    "groups": {
+      "media": "Média",
+      "format": "Mise en forme"
+    }
+  },
+  "bubbleMenu": {
+    "bold": "Gras",
+    "italic": "Italique"
   },
   "map": {
     "home": "← accueil",

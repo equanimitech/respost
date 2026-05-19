@@ -18,7 +18,7 @@
 // publish use case do not depend on it.
 // ============================================================
 
-import type { Node as PMNode, Schema } from "@tiptap/pm/model";
+import { DOMParser as PMDOMParser, type Node as PMNode, type Schema } from "@tiptap/pm/model";
 import type { JSONContent } from "@tiptap/react";
 import { parseOgHost } from "@/domain/value-objects/blocks";
 import type {
@@ -185,8 +185,11 @@ export function docToDraftBlocks(
 
 // ─── DraftBlock[] → ProseMirror JSON doc ───────────────────────
 
+// tiptap-markdown@0.9 returns an HTML string from parser.parse(md),
+// not a PMNode. We convert that HTML through ProseMirror's DOMParser
+// against the editor schema below.
 type MarkdownParserLike = {
-  parse: (md: string) => PMNode;
+  parse: (md: string) => string;
 };
 
 export function photoDraftToNodeJson(b: DraftPhotoBlock): JSONContent {
@@ -265,13 +268,19 @@ export function linkCardDraftToNodeJson(b: DraftLinkBlock): JSONContent {
 export function draftBlocksToDocJson(
   blocks: ReadonlyArray<DraftBlock>,
   parser: MarkdownParserLike,
+  schema: Schema,
 ): JSONContent {
   const content: JSONContent[] = [];
   for (const b of blocks) {
     switch (b.type) {
       case "md": {
-        const parsed = parser.parse(b.md);
-        const json = parsed.toJSON() as JSONContent;
+        // markdown-it renders to HTML; we feed that through ProseMirror's
+        // DOMParser. Markdown extension is configured with html:false so
+        // raw HTML in source is escaped — the rendered string is safe.
+        const html = parser.parse(b.md);
+        const dom = new window.DOMParser().parseFromString(html, "text/html");
+        const pmDoc = PMDOMParser.fromSchema(schema).parse(dom.body);
+        const json = pmDoc.toJSON() as JSONContent;
         const children = (json.content ?? []) as JSONContent[];
         for (const c of children) content.push(c);
         break;
