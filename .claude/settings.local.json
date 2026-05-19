@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build:*)",
+      "Bash(curl -s http://localhost:3000 | grep -o 'href=\"[^\"]*\\\\.css\"')",
+      "Bash(curl -s \"http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__28bc9c2a._.css\" | grep -E 'h-screen|h-full|w-full|w-screen')",
+      "Bash(curl -s \"http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__28bc9c2a._.css\" | head -30)",
+      "Bash(curl -s \"http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__28bc9c2a._.css\" | grep -c 'tailwind\\\\|h-screen\\\\|@layer\\\\|@utility')",
+      "Bash(grep -r 'h-screen\\\\|w-screen\\\\|h-full\\\\|w-full' /Users/rafa/Developer/mindful-tech/convivial-network/.next/static/chunks/*.css | head -5)",
+      "Bash(git add:*)",
+      "mcp__context7__resolve-library-id",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(find /Users/rafa/Developer/mindful-tech/convivial-network/app -type f -name \"*rkey*\" 2>/dev/null | head -20)",
+      "Bash(find /Users/rafa/Developer/mindful-tech/convivial-network -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) -path \"*/application/*\" 2>/dev/null | head -20)",
+      "Bash(curl -sI -L \"https://bsky.social/xrpc/com.atproto.sync.getBlob?did=did:plc:au4jxkre6jgp74mnz4rmy6jg&cid=bafkreibsdtncwvosr7xm6mxtiit3pfksidlhjvs43xpme7gzzxa4c63jc4\" 2>&1 | head -10)",
+      "Bash(which vercel:*)",
+      "Bash(vercel whoami:*)"
+    ]
+  }
+}

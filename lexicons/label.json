@@ -1,0 +1,36 @@
+{
+  "lexicon": 1,
+  "id": "network.respost.label",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A user-defined place nickname. Labels are personal — 'home' means your home.",
+      "record": {
+        "type": "object",
+        "required": ["name", "latitude", "longitude", "createdAt"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The label name: home, office, barzin..."
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "radius": {
+            "type": "number",
+            "description": "Match radius in meters. Default 100m."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,449 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────
+ * shadcn semantic tokens — mapped onto the paper palette so any
+ * shadcn component blends with the rest of the UI.
+ * ──────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-popover: var(--paper-light);
+  --color-popover-foreground: var(--ink);
+  --color-card: var(--paper-light);
+  --color-card-foreground: var(--ink);
+  --color-primary: var(--ink);
+  --color-primary-foreground: var(--paper);
+  --color-secondary: var(--paper-deep);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--paper-deep);
+  --color-muted-foreground: var(--ink-mute);
+  --color-accent: var(--paper-edge);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--stamp-red);
+  --color-destructive-foreground: var(--paper);
+  --color-border: var(--divider);
+  --color-input: var(--divider);
+  --color-ring: var(--inkblue);
+  --radius: var(--r-md);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * respost — design tokens
+ * Paper-first palette. Components read everything through var(--…)
+ * so a single token swap in dark mode flips the whole UI.
+ * ──────────────────────────────────────────────────────────────── */
+
+:root {
+  /* paper neutrals */
+  --paper:        #f6f1e7;
+  --paper-light:  #fbf6ec;
+  --paper-deep:   #ede4d2;
+  --paper-edge:   #e0d4be;
+  --divider:      #e8dfce;
+
+  /* ink */
+  --ink:          #2a2520;
+  --ink-soft:     #4a423a;
+  --ink-mute:     #82786b;
+  --ink-faint:    #b3a994;
+
+  /* accents */
+  --terra:        #b8634a;
+  --terra-deep:   #9c4530;
+  --inkblue:      #4a6378;
+  --inkblue-deep: #34495b;
+  --olive:        #7d7647;
+  --stamp-red:    #a8493c;
+
+  /* paper-grain rgba values — extracted so dark mode can retune alpha + hue */
+  --grain-a:      rgba(120, 90, 60, 0.035);
+  --grain-b:      rgba(80, 60, 40, 0.025);
+  --grain-light:  rgba(120, 90, 60, 0.04);
+
+  /* paper-handwritten gradient stops */
+  --handwritten-bg:     #f4ead4;
+  --handwritten-tint:   rgba(184, 99, 74, 0.05);
+  --handwritten-rule:   rgba(74, 99, 120, 0.10);
+
+  /* radii + shadows */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-xl: 22px;
+
+  --sh-card:  0 1px 2px rgba(60, 40, 20, 0.06), 0 8px 24px rgba(60, 40, 20, 0.08);
+  --sh-paper: 0 2px 4px rgba(60, 40, 20, 0.04), 0 18px 40px rgba(60, 40, 20, 0.10);
+  --sh-soft:  0 1px 2px rgba(60, 40, 20, 0.05);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Dark mode — parchment under candlelight, not flat black.
+ * Triggered by either OS preference or an explicit [data-theme]
+ * attribute on <html>.
+ * ──────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:        #1f1a14;
+    --paper-light:  #28221b;
+    --paper-deep:   #15110c;
+    --paper-edge:   #3a3128;
+    --divider:      #2f2820;
+
+    --ink:          #ece2d0;
+    --ink-soft:     #c9bda8;
+    --ink-mute:     #948574;
+    --ink-faint:    #6a5e4d;
+
+    --terra:        #d6826a;
+    --terra-deep:   #b8634a;
+    --inkblue:      #7e9eb5;
+    --inkblue-deep: #5a7a90;
+    --olive:        #a8a06d;
+    --stamp-red:    #c95e4f;
+
+    --grain-a:      rgba(255, 230, 190, 0.030);
+    --grain-b:      rgba(255, 220, 180, 0.022);
+    --grain-light:  rgba(255, 230, 190, 0.035);
+
+    --handwritten-bg:     #221d16;
+    --handwritten-tint:   rgba(214, 130, 106, 0.06);
+    --handwritten-rule:   rgba(126, 158, 181, 0.10);
+
+    --sh-card:  0 1px 2px rgba(0, 0, 0, 0.40), 0 8px 24px rgba(0, 0, 0, 0.40);
+    --sh-paper: 0 2px 4px rgba(0, 0, 0, 0.35), 0 18px 40px rgba(0, 0, 0, 0.45);
+    --sh-soft:  0 1px 2px rgba(0, 0, 0, 0.30);
+  }
+}
+
+[data-theme="dark"] {
+  --paper:        #1f1a14;
+  --paper-light:  #28221b;
+  --paper-deep:   #15110c;
+  --paper-edge:   #3a3128;
+  --divider:      #2f2820;
+
+  --ink:          #ece2d0;
+  --ink-soft:     #c9bda8;
+  --ink-mute:     #948574;
+  --ink-faint:    #6a5e4d;
+
+  --terra:        #d6826a;
+  --terra-deep:   #b8634a;
+  --inkblue:      #7e9eb5;
+  --inkblue-deep: #5a7a90;
+  --olive:        #a8a06d;
+  --stamp-red:    #c95e4f;
+
+  --grain-a:      rgba(255, 230, 190, 0.030);
+  --grain-b:      rgba(255, 220, 180, 0.022);
+  --grain-light:  rgba(255, 230, 190, 0.035);
+
+  --handwritten-bg:     #221d16;
+  --handwritten-tint:   rgba(214, 130, 106, 0.06);
+  --handwritten-rule:   rgba(126, 158, 181, 0.10);
+
+  --sh-card:  0 1px 2px rgba(0, 0, 0, 0.40), 0 8px 24px rgba(0, 0, 0, 0.40);
+  --sh-paper: 0 2px 4px rgba(0, 0, 0, 0.35), 0 18px 40px rgba(0, 0, 0, 0.45);
+  --sh-soft:  0 1px 2px rgba(0, 0, 0, 0.30);
+}
+
+[data-theme="light"] {
+  --paper:        #f6f1e7;
+  --paper-light:  #fbf6ec;
+  --paper-deep:   #ede4d2;
+  --paper-edge:   #e0d4be;
+  --divider:      #e8dfce;
+
+  --ink:          #2a2520;
+  --ink-soft:     #4a423a;
+  --ink-mute:     #82786b;
+  --ink-faint:    #b3a994;
+
+  --terra:        #b8634a;
+  --terra-deep:   #9c4530;
+  --inkblue:      #4a6378;
+  --inkblue-deep: #34495b;
+  --olive:        #7d7647;
+  --stamp-red:    #a8493c;
+
+  --grain-a:      rgba(120, 90, 60, 0.035);
+  --grain-b:      rgba(80, 60, 40, 0.025);
+  --grain-light:  rgba(120, 90, 60, 0.04);
+
+  --handwritten-bg:     #f4ead4;
+  --handwritten-tint:   rgba(184, 99, 74, 0.05);
+  --handwritten-rule:   rgba(74, 99, 120, 0.10);
+
+  --sh-card:  0 1px 2px rgba(60, 40, 20, 0.06), 0 8px 24px rgba(60, 40, 20, 0.08);
+  --sh-paper: 0 2px 4px rgba(60, 40, 20, 0.04), 0 18px 40px rgba(60, 40, 20, 0.10);
+  --sh-soft:  0 1px 2px rgba(60, 40, 20, 0.05);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Tailwind v4 theme bridge — exposes tokens as bg-paper / text-ink etc.
+ * ──────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  --color-paper:       var(--paper);
+  --color-paper-light: var(--paper-light);
+  --color-paper-deep:  var(--paper-deep);
+  --color-paper-edge:  var(--paper-edge);
+  --color-divider:     var(--divider);
+  --color-ink:         var(--ink);
+  --color-ink-soft:    var(--ink-soft);
+  --color-ink-mute:    var(--ink-mute);
+  --color-ink-faint:   var(--ink-faint);
+  --color-terra:       var(--terra);
+  --color-terra-deep:  var(--terra-deep);
+  --color-inkblue:     var(--inkblue);
+  --color-inkblue-deep:var(--inkblue-deep);
+  --color-olive:       var(--olive);
+  --color-stamp-red:   var(--stamp-red);
+  --font-sans:         var(--font-sans-display);
+  --font-serif:        var(--font-serif-display);
+  --font-hand:         var(--font-hand);
+  --font-mono:         var(--font-mono);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Paper textures — driven by tokens so they retune in dark mode
+ * ──────────────────────────────────────────────────────────────── */
+
+.paper-grain {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(var(--grain-a) 1px, transparent 1px),
+    radial-gradient(var(--grain-b) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 2px;
+}
+
+.paper-grain-light {
+  background-color: var(--paper-light);
+  background-image:
+    radial-gradient(var(--grain-light) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+.paper-handwritten {
+  background:
+    linear-gradient(180deg, var(--handwritten-tint), transparent 30%),
+    repeating-linear-gradient(180deg, transparent 0 26px, var(--handwritten-rule) 26px 27px),
+    var(--handwritten-bg);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Type families — wired to next/font CSS variables (set in layout.tsx)
+ * ──────────────────────────────────────────────────────────────── */
+
+.t-sans   { font-family: var(--font-sans-display), ui-sans-serif, system-ui, -apple-system, sans-serif; }
+.t-serif  { font-family: var(--font-serif-display), "Iowan Old Style", Georgia, serif; }
+.t-hand   { font-family: var(--font-hand), "Bradley Hand", cursive; }
+.t-mono   { font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace; }
+
+/* ─────────────────────────────────────────────────────────────────
+ * Layout primitives
+ * ──────────────────────────────────────────────────────────────── */
+
+.app {
+  width: 100%; height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans-display), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+
+.stamp-edge {
+  --d: 6px;
+  -webkit-mask:
+    radial-gradient(circle var(--d) at var(--d) 50%, transparent 98%, #000) left/calc(var(--d)*2) 100% repeat-y,
+    radial-gradient(circle var(--d) at calc(100% - var(--d)) 50%, transparent 98%, #000) right/calc(var(--d)*2) 100% repeat-y,
+    linear-gradient(#000,#000) center / calc(100% - var(--d)*4) 100% no-repeat;
+  -webkit-mask-composite: source-over;
+}
+
+.ink-dash {
+  background-image: linear-gradient(90deg, var(--ink-mute) 0 4px, transparent 4px 8px);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* ─────────────────────────────────────────────────────────────────
+ * Photo placeholders — stable across themes; dimmed in dark mode
+ * ──────────────────────────────────────────────────────────────── */
+
+.photo-placeholder {
+  background-color: #d4c2a8;
+  background-image:
+    repeating-linear-gradient(135deg,
+      rgba(255,255,255,.06) 0 2px,
+      transparent 2px 18px),
+    linear-gradient(160deg, #c4a982, #8a7458 70%, #6b573f);
+}
+.photo-placeholder.cafe {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 16px),
+    linear-gradient(160deg, #c89978, #8e5638);
+}
+.photo-placeholder.beach {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 16px),
+    linear-gradient(180deg, #b8c8b0 0%, #d3c8a8 55%, #a99270 100%);
+}
+.photo-placeholder.street {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 16px),
+    linear-gradient(160deg, #786556 0%, #4a3a2c 100%);
+}
+.photo-placeholder.river {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 16px),
+    linear-gradient(180deg, #94aab5 0%, #6e8694 50%, #d6c6a0 100%);
+}
+.photo-placeholder.window {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 16px),
+    linear-gradient(160deg, #d8b88a, #a47648 60%, #5a3e25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .photo-placeholder { filter: brightness(0.82) saturate(0.9); }
+}
+[data-theme="dark"] .photo-placeholder { filter: brightness(0.82) saturate(0.9); }
+[data-theme="light"] .photo-placeholder { filter: none; }
+
+/* ─────────────────────────────────────────────────────────────────
+ * Animations
+ * ──────────────────────────────────────────────────────────────── */
+
+@keyframes rp-caret { 50% { opacity: 0; } }
+
+/* ─────────────────────────────────────────────────────────────────
+ * Base
+ * ──────────────────────────────────────────────────────────────── */
+
+html, body {
+  background: var(--paper-deep);
+  color: var(--ink);
+  margin: 0; padding: 0;
+}
+
+body {
+  font-family: var(--font-sans-display), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Phone-shell — caps the mobile-shaped UI on desktop, widens on lg+
+ * ──────────────────────────────────────────────────────────────── */
+
+.phone-shell {
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--paper-deep);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.phone-frame {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100dvh;
+  background: var(--paper);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-frame > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .phone-frame {
+    max-width: 460px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border-radius: 28px;
+    min-height: calc(100dvh - 48px);
+    box-shadow:
+      0 30px 80px rgba(40, 30, 20, 0.18),
+      0 0 0 1px rgba(60, 40, 20, 0.08);
+  }
+  .phone-shell { align-items: flex-start; }
+}
+
+@media (min-width: 1024px) {
+  .phone-frame {
+    max-width: 720px;
+    border-radius: 20px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .phone-frame { max-width: 880px; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Tiptap prose editor — match serif textarea it replaces.
+ * ──────────────────────────────────────────────────────────────── */
+
+.tiptap-prose {
+  position: relative;
+}
+
+.tiptap-prose .ProseMirror {
+  min-height: 140px;
+  outline: none;
+  font-family: var(--font-serif-display), serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  caret-color: var(--terra);
+}
+
+.tiptap-prose .ProseMirror::selection,
+.tiptap-prose .ProseMirror *::selection {
+  background: rgba(184, 99, 74, 0.18);
+}
+
+.tiptap-prose .ProseMirror p {
+  margin: 0 0 0.5em;
+}
+
+.tiptap-prose .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.tiptap-prose .ProseMirror ul,
+.tiptap-prose .ProseMirror ol {
+  padding-left: 1.4em;
+  margin: 0.25em 0 0.5em;
+}
+
+.tiptap-prose .ProseMirror a {
+  color: var(--inkblue-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.tiptap-prose .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--ink-mute);
+  font-style: italic;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

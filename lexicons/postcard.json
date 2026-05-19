@@ -1,0 +1,164 @@
+{
+  "lexicon": 1,
+  "id": "network.respost.postcard",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A block-structured postcard addressed to one named recipient.",
+      "record": {
+        "type": "object",
+        "required": ["to", "from", "blocks", "createdAt"],
+        "properties": {
+          "to": {
+            "type": "string",
+            "maxLength": 80,
+            "maxGraphemes": 40,
+            "description": "Recipient name as written on the envelope."
+          },
+          "from": {
+            "type": "string",
+            "maxLength": 80,
+            "maxGraphemes": 40,
+            "description": "Sender display name."
+          },
+          "place": {
+            "type": "string",
+            "maxLength": 160,
+            "maxGraphemes": 80,
+            "description": "Sender's place line (e.g. 'Barcelona')."
+          },
+          "senderLocation": {
+            "type": "ref",
+            "ref": "#location"
+          },
+          "blocks": {
+            "type": "array",
+            "minLength": 1,
+            "maxLength": 40,
+            "items": {
+              "type": "union",
+              "refs": [
+                "#blockMarkdown",
+                "#blockPhoto",
+                "#blockMusic",
+                "#blockVideo",
+                "#blockPlace",
+                "#blockArticle"
+              ]
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+
+    "location": {
+      "type": "object",
+      "required": ["name", "granularity"],
+      "description": "A place at a chosen level of precision.",
+      "properties": {
+        "name":      { "type": "string", "maxLength": 200 },
+        "latitude":  { "type": "number" },
+        "longitude": { "type": "number" },
+        "granularity": {
+          "type": "string",
+          "knownValues": ["establishment", "neighborhood", "city", "region", "country"]
+        }
+      }
+    },
+
+    "blockMarkdown": {
+      "type": "object",
+      "required": ["type", "id", "md"],
+      "properties": {
+        "type": { "type": "string", "const": "md" },
+        "id":   { "type": "string", "maxLength": 64 },
+        "md":   { "type": "string", "maxGraphemes": 2000 }
+      }
+    },
+
+    "blockPhoto": {
+      "type": "object",
+      "required": ["type", "id", "kind"],
+      "properties": {
+        "type": { "type": "string", "const": "photo" },
+        "id":   { "type": "string", "maxLength": 64 },
+        "kind": { "type": "string", "knownValues": ["uploaded", "handwriting"] },
+        "image": {
+          "type": "blob",
+          "accept": ["image/jpeg", "image/png", "image/webp"],
+          "maxSize": 1500000
+        },
+        "caption": { "type": "string", "maxGraphemes": 80 },
+        "rot":     { "type": "number" }
+      }
+    },
+
+    "blockMusic": {
+      "type": "object",
+      "required": ["type", "id", "url", "service", "title"],
+      "properties": {
+        "type":    { "type": "string", "const": "music" },
+        "id":      { "type": "string", "maxLength": 64 },
+        "url":     { "type": "string", "format": "uri" },
+        "service": {
+          "type": "string",
+          "knownValues": ["spotify", "youtube", "apple", "soundcloud", "bandcamp"]
+        },
+        "title":  { "type": "string", "maxLength": 240 },
+        "artist": { "type": "string", "maxLength": 240 },
+        "album":  { "type": "string", "maxLength": 240 },
+        "dur":    { "type": "string", "maxLength": 16 },
+        "tone":   { "type": "string", "knownValues": ["a", "b", "c", "d"] }
+      }
+    },
+
+    "blockVideo": {
+      "type": "object",
+      "required": ["type", "id", "url", "service", "title"],
+      "properties": {
+        "type":    { "type": "string", "const": "video" },
+        "id":      { "type": "string", "maxLength": 64 },
+        "url":     { "type": "string", "format": "uri" },
+        "service": { "type": "string", "knownValues": ["youtube"] },
+        "title":   { "type": "string", "maxLength": 240 },
+        "channel": { "type": "string", "maxLength": 240 },
+        "dur":     { "type": "string", "maxLength": 16 },
+        "thumbUrl":{ "type": "string", "format": "uri" }
+      }
+    },
+
+    "blockPlace": {
+      "type": "object",
+      "required": ["type", "id", "url", "name"],
+      "properties": {
+        "type":      { "type": "string", "const": "place" },
+        "id":        { "type": "string", "maxLength": 64 },
+        "url":       { "type": "string", "format": "uri" },
+        "name":      { "type": "string", "maxLength": 240 },
+        "addr":      { "type": "string", "maxLength": 400 },
+        "caption":   { "type": "string", "maxGraphemes": 120 },
+        "latitude":  { "type": "number" },
+        "longitude": { "type": "number" }
+      }
+    },
+
+    "blockArticle": {
+      "type": "object",
+      "required": ["type", "id", "url", "host", "title"],
+      "properties": {
+        "type":     { "type": "string", "const": "article" },
+        "id":       { "type": "string", "maxLength": 64 },
+        "url":      { "type": "string", "format": "uri" },
+        "host":     { "type": "string", "maxLength": 240 },
+        "title":    { "type": "string", "maxLength": 400 },
+        "excerpt":  { "type": "string", "maxGraphemes": 400 },
+        "imageUrl": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}
