@@ -1,33 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Lora, Caveat, JetBrains_Mono } from "next/font/google";
+import { Lora, Caveat } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
-
-const dmSans = DM_Sans({
-  variable: "--font-sans-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 const lora = Lora({
   variable: "--font-serif-display",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
+  display: "swap",
 });
 
 const caveat = Caveat({
   variable: "--font-hand",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-});
-
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -58,8 +48,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ede4d2" },
     { media: "(prefers-color-scheme: dark)", color: "#15110c" },
@@ -72,9 +60,9 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
   return (
-    <html lang={locale}>
+    <html lang={locale} style={{ colorScheme: "light dark" }} suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${lora.variable} ${caveat.variable} ${mono.variable} antialiased`}
+        className={`${lora.variable} ${caveat.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <NuqsAdapter>{children}</NuqsAdapter>
