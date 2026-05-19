@@ -9,10 +9,8 @@ import {
   parseAsStringEnum,
   parseAsJson,
 } from "nuqs";
-import {
-  publishPostcard,
-  type DraftBlock,
-} from "@/application/actions/publishPostcard";
+import { publishPostcard } from "@/application/actions/publishPostcard";
+import type { DraftBlock } from "@/application/composer/draftBlock";
 import { when } from "@legendapp/state";
 import { decodeProposePayload } from "@/application/composer/composeUrl";
 import {

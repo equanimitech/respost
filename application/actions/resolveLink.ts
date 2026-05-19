@@ -5,7 +5,14 @@ import {
   inferVideoService,
   parseOgHost,
 } from "@/domain/value-objects/blocks";
-import type { DraftBlock } from "./publishPostcard";
+import type { DraftBlock } from "@/application/composer/draftBlock";
+import {
+  PLACEHOLDER_TITLES,
+  placeholderArticle,
+  placeholderMusic,
+  placeholderPlace,
+  placeholderVideo,
+} from "@/application/composer/draftBlockFactories";
 
 export type LinkKind = "song" | "video" | "place" | "link";
 
@@ -193,7 +200,7 @@ async function resolveVideo(url: string, host: string): Promise<DraftBlock> {
     type: "video",
     url,
     service,
-    title: og.title ?? "Video",
+    title: og.title ?? PLACEHOLDER_TITLES.video,
     channel: og.siteName ?? host,
     thumbUrl: og.image,
   };
@@ -208,7 +215,7 @@ async function resolveSong(url: string): Promise<DraftBlock> {
 
   const og = await fetchOgMeta(url);
 
-  const rawTitle = oembed?.title ?? og.title ?? "Track";
+  const rawTitle = oembed?.title ?? og.title ?? PLACEHOLDER_TITLES.music;
   const { title, artist: parsedArtist } = splitArtistTrack(rawTitle);
 
   let artist = parsedArtist ?? oembed?.author_name;
@@ -239,7 +246,7 @@ async function resolvePlace(url: string, host: string): Promise<DraftBlock> {
   return {
     type: "place",
     url,
-    name: og.title ?? "A place",
+    name: og.title ?? PLACEHOLDER_TITLES.place,
     addr: og.siteName ?? host,
   };
 }
@@ -289,23 +296,12 @@ export async function resolveLink(
 function shapeOnly(url: string, host: string, kind: LinkKind): DraftBlock {
   switch (kind) {
     case "song":
-      return {
-        type: "music",
-        url,
-        service: inferMusicService(url) ?? "spotify",
-        title: "Track",
-      };
+      return placeholderMusic(url);
     case "video":
-      return {
-        type: "video",
-        url,
-        service: inferVideoService(url) ?? "youtube",
-        title: "Video",
-        channel: host,
-      };
+      return placeholderVideo(url, host);
     case "place":
-      return { type: "place", url, name: "A place", addr: host };
+      return placeholderPlace(url, host);
     case "link":
-      return { type: "article", url, host, title: host };
+      return placeholderArticle(url, host);
   }
 }

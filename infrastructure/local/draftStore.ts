@@ -6,7 +6,7 @@ import {
   persistObservable,
 } from "@legendapp/state/persist";
 import { ObservablePersistIndexedDB } from "@legendapp/state/persist-plugins/indexeddb";
-import type { DraftBlock } from "@/application/actions/publishPostcard";
+import type { DraftBlock } from "@/application/composer/draftBlock";
 
 // ─── On-device draft store ──────────────────────────────────────
 //

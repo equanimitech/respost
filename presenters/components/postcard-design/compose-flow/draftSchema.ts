@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { DraftBlock } from "@/application/actions/publishPostcard";
+import type { DraftBlock } from "@/application/composer/draftBlock";
 import {
   MUSIC_SERVICES,
   MUSIC_TONES,

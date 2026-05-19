@@ -11,10 +11,7 @@ import type {
   BlockId,
   CreatePostcardCommand,
   Location,
-  MusicService,
-  MusicTone,
   PhotoKind,
-  VideoService,
 } from "@/domain/types";
 import {
   createPostcardRecord,
@@ -22,74 +19,24 @@ import {
 } from "@/infrastructure/atproto/client";
 import { revalidatePath } from "next/cache";
 
-// ─── Draft block types — what the composer sends to the server ──
-// "Draft" means: ids may be missing, rotations may not be frozen,
-// blob refs are already uploaded (composer uploads photos via
-// uploadImageBlob before invoking publish).
-
-type DraftBlobRef = {
-  ref: { $link: string };
-  mimeType: string;
-  size: number;
-};
-
-export type DraftMarkdownBlock = { type: "md"; id?: string; md: string };
-export type DraftPhotoBlock = {
-  type: "photo";
-  id?: string;
-  kind: "uploaded" | "handwriting";
-  blob?: DraftBlobRef;
-  caption?: string;
-  rot?: number;
-};
-export type DraftMusicBlock = {
-  type: "music";
-  id?: string;
-  url: string;
-  service: MusicService;
-  title: string;
-  artist?: string;
-  album?: string;
-  dur?: string;
-  tone?: MusicTone;
-};
-export type DraftVideoBlock = {
-  type: "video";
-  id?: string;
-  url: string;
-  service: VideoService;
-  title: string;
-  channel?: string;
-  dur?: string;
-  thumbUrl?: string;
-};
-export type DraftPlaceBlock = {
-  type: "place";
-  id?: string;
-  url: string;
-  name: string;
-  addr?: string;
-  caption?: string;
-  latitude?: number;
-  longitude?: number;
-};
-export type DraftArticleBlock = {
-  type: "article";
-  id?: string;
-  url: string;
-  host: string;
-  title: string;
-  excerpt?: string;
-  imageUrl?: string;
-};
-
-export type DraftBlock =
-  | DraftMarkdownBlock
-  | DraftPhotoBlock
-  | DraftMusicBlock
-  | DraftVideoBlock
-  | DraftPlaceBlock
-  | DraftArticleBlock;
+// Draft block types live in application/composer/draftBlock.ts. Re-exported
+// here for back-compat; new imports should target the new location.
+export type {
+  DraftArticleBlock,
+  DraftBlobRef,
+  DraftBlock,
+  DraftLinkBlock,
+  DraftMarkdownBlock,
+  DraftMusicBlock,
+  DraftPhotoBlock,
+  DraftPlaceBlock,
+  DraftVideoBlock,
+} from "@/application/composer/draftBlock";
+import type {
+  DraftBlobRef,
+  DraftBlock,
+  DraftPhotoBlock,
+} from "@/application/composer/draftBlock";
 
 type SenderLocationInput = {
   name: string;

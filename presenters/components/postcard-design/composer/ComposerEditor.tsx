@@ -2,15 +2,21 @@
 
 import { useMemo, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import type { DraftBlock } from "@/application/actions/publishPostcard";
+import type {
+  DraftBlock,
+  DraftLinkBlock,
+  DraftPhotoBlock,
+} from "@/application/composer/draftBlock";
+import { isDraftLinkBlock } from "@/application/composer/draftBlock";
 import { uploadImageBlob } from "@/application/actions/uploadImageBlob";
 import { resolveLink, type LinkKind } from "@/application/actions/resolveLink";
-import { PostcardBlockView } from "../blocks/PostcardBlockView";
 import { Icon } from "../primitives/Icon";
-import type { PhotoBlock, Block, BlockId, PhotoKind } from "@/domain/types";
 import { ComposerChrome } from "./ComposerChrome";
 import { compressImage } from "../compose-flow/compressImage";
-import { TiptapProseEditor } from "./TiptapProseEditor";
+import {
+  TiptapPostcardEditor,
+  type TiptapPostcardEditorHandle,
+} from "./TiptapPostcardEditor";
 import type { SlashCommandItem } from "./SlashCommandsMenu";
 import {
   buildFormatCommands,
@@ -28,36 +34,6 @@ type Props = {
   onRegisterPreviewUrl?: (refLink: string, url: string) => void;
 };
 
-function draftToView(d: DraftBlock, idx: number): Block {
-  const fakeId = `draft-${idx}` as BlockId;
-  switch (d.type) {
-    case "md":
-      return { type: "md", id: fakeId, md: d.md };
-    case "photo": {
-      const kind: PhotoKind = d.kind;
-      const block: PhotoBlock = {
-        type: "photo",
-        id: fakeId,
-        kind,
-        image: d.blob
-          ? { ref: d.blob.ref.$link, mimeType: d.blob.mimeType }
-          : undefined,
-        caption: d.caption,
-        rot: d.rot ?? -1,
-      };
-      return block;
-    }
-    case "music":
-      return { ...d, id: fakeId };
-    case "video":
-      return { ...d, id: fakeId };
-    case "place":
-      return { ...d, id: fakeId };
-    case "article":
-      return { ...d, id: fakeId };
-  }
-}
-
 const URL_RE = /^https?:\/\/[^\s]+$/;
 
 export function ComposerEditor({
@@ -71,7 +47,6 @@ export function ComposerEditor({
   onRegisterPreviewUrl,
 }: Props) {
   const t = useTranslations("editor");
-  const [draftMd, setDraftMd] = useState("");
   const [photoBusy, setPhotoBusy] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [linkPrompt, setLinkPrompt] = useState<{
@@ -85,15 +60,8 @@ export function ComposerEditor({
   const handwritingRef = useRef<HTMLInputElement | null>(null);
   const linkInputRef = useRef<HTMLInputElement | null>(null);
 
+  const editorHandleRef = useRef<TiptapPostcardEditorHandle | null>(null);
   const openLinkPromptRef = useRef<(kind: LinkKind) => void>(() => {});
-
-  const flushDraftMd = (
-    current: ReadonlyArray<DraftBlock>
-  ): ReadonlyArray<DraftBlock> => {
-    const t = draftMd.trim();
-    if (t.length === 0) return current;
-    return [...current, { type: "md", md: draftMd }];
-  };
 
   const handleAddPhoto = async (
     file: File,
@@ -112,17 +80,12 @@ export function ComposerEditor({
         return;
       }
       onRegisterPreviewUrl?.(result.blob.ref.$link, compressed.objectUrl);
-      const flushed = flushDraftMd(blocks);
-      const next: ReadonlyArray<DraftBlock> = [
-        ...flushed,
-        {
-          type: "photo",
-          kind,
-          blob: result.blob,
-        },
-      ];
-      onChange(next);
-      setDraftMd("");
+      const photo: DraftPhotoBlock = {
+        type: "photo",
+        kind,
+        blob: result.blob,
+      };
+      editorHandleRef.current?.insertPhoto(photo);
     } catch (err) {
       setPhotoError(err instanceof Error ? err.message : t("photoFailed"));
     } finally {
@@ -149,9 +112,9 @@ export function ComposerEditor({
     startTransition(async () => {
       const result = await resolveLink(url, linkPrompt.kind);
       if (result.success === true) {
-        const flushed = flushDraftMd(blocks);
-        onChange([...flushed, result.block]);
-        setDraftMd("");
+        if (isDraftLinkBlock(result.block)) {
+          editorHandleRef.current?.insertLinkCard(result.block);
+        }
         setLinkPrompt(null);
         return;
       }
@@ -164,15 +127,7 @@ export function ComposerEditor({
 
   const dismissLinkPrompt = () => setLinkPrompt(null);
 
-  const removeBlock = (i: number) => {
-    const next = blocks.slice(0, i).concat(blocks.slice(i + 1));
-    onChange(next);
-  };
-
   const goPreview = () => {
-    const next = flushDraftMd(blocks);
-    if (next !== blocks) onChange(next);
-    setDraftMd("");
     onPreview();
   };
 
@@ -227,6 +182,13 @@ export function ComposerEditor({
     ],
     [tSlash]
   );
+
+  const slashItems = useMemo<readonly SlashCommandItem[]>(
+    () => [...linkSlashItems, ...formatSlashItems],
+    [linkSlashItems, formatSlashItems]
+  );
+
+  const empty = blocks.length === 0;
 
   return (
     <div className="app">
@@ -288,7 +250,7 @@ export function ComposerEditor({
             flexDirection: "column",
           }}
         >
-          {blocks.length === 0 && draftMd.length === 0 && (
+          {empty && (
             <button
               type="button"
               onClick={() => onPickPhoto("uploaded")}
@@ -319,37 +281,7 @@ export function ComposerEditor({
             </button>
           )}
 
-          {blocks.map((b, i) => (
-            <div key={i} style={{ position: "relative" }}>
-              <PostcardBlockView block={draftToView(b, i)} resolveImageUrl={resolveImageUrl} />
-              <button
-                type="button"
-                onClick={() => removeBlock(i)}
-                aria-label={t("removeBlockAria")}
-                style={{
-                  position: "absolute",
-                  top: 12,
-                  right: 12,
-                  width: 26,
-                  height: 26,
-                  borderRadius: "50%",
-                  background: "rgba(60,40,20,.6)",
-                  color: "var(--paper-light)",
-                  border: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  fontSize: 14,
-                  lineHeight: 1,
-                }}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-
-          {/* Inline prose editor (tiptap, markdown-backed) */}
+          {/* Unified tiptap editor — text + photos + link cards in one doc */}
           <div
             style={{
               position: "relative",
@@ -357,7 +289,7 @@ export function ComposerEditor({
               flex: 1,
             }}
           >
-            {blocks.length === 0 && draftMd.length === 0 && (
+            {empty && (
               <div
                 className="t-mono"
                 style={{
@@ -374,11 +306,14 @@ export function ComposerEditor({
                 <span aria-hidden>✎</span> {t("writeHere")}
               </div>
             )}
-            <TiptapProseEditor
-              value={draftMd}
-              onChange={setDraftMd}
-              slashItems={[...linkSlashItems, ...formatSlashItems]}
-              placeholder={blocks.length === 0 ? t("placeholderEmpty") : t("placeholderContinue")}
+            <TiptapPostcardEditor
+              value={blocks}
+              onChange={onChange}
+              slashItems={slashItems}
+              placeholder={empty ? t("placeholderEmpty") : t("placeholderContinue")}
+              resolveImageUrl={resolveImageUrl}
+              removeAriaLabel={t("removeBlockAria")}
+              handleRef={editorHandleRef}
             />
           </div>
         </div>
@@ -592,7 +527,7 @@ export function ComposerEditor({
         <button
           type="button"
           onClick={goPreview}
-          disabled={blocks.length === 0 && draftMd.trim().length === 0}
+          disabled={blocks.length === 0}
           style={{
             padding: "10px 18px",
             borderRadius: 999,
@@ -606,7 +541,7 @@ export function ComposerEditor({
             display: "inline-flex",
             alignItems: "center",
             gap: 5,
-            opacity: blocks.length === 0 && draftMd.trim().length === 0 ? 0.45 : 1,
+            opacity: blocks.length === 0 ? 0.45 : 1,
           }}
         >
           {t("previewCta")}

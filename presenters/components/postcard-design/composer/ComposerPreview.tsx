@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { DraftBlock } from "@/application/actions/publishPostcard";
+import type { DraftBlock } from "@/application/composer/draftBlock";
 import type { Block, BlockId, PhotoBlock, PhotoKind } from "@/domain/types";
 import { PostcardBlockView } from "../blocks/PostcardBlockView";
 import { ComposerChrome } from "./ComposerChrome";

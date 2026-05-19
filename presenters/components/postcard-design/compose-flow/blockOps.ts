@@ -1,7 +1,7 @@
 // Pure functional helpers for the composer draft state.
 // All operations return a new array; the input is never mutated.
 
-import type { DraftBlock } from "@/application/actions/publishPostcard";
+import type { DraftBlock } from "@/application/composer/draftBlock";
 
 export function appendBlock(
   blocks: ReadonlyArray<DraftBlock>,
