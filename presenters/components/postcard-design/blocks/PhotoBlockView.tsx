@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import type { PhotoBlock } from "@/domain/types";
 import { Photo } from "../primitives/Photo";
+import { PhotoLightbox } from "./PhotoLightbox";
 
 type Props = {
   block: PhotoBlock;
@@ -7,6 +11,7 @@ type Props = {
 };
 
 export function PhotoBlockView({ block, imageUrl }: Props) {
+  const [open, setOpen] = useState(false);
   const rot = block.rot ?? -1.5;
 
   if (block.kind === "handwriting") {
@@ -26,7 +31,7 @@ export function PhotoBlockView({ block, imageUrl }: Props) {
           <div className="paper-handwritten" style={{ padding: "18px 18px 16px" }}>
             <div
               className="t-hand"
-              style={{ fontSize: 21, lineHeight: 1.35, color: "#3b3424" }}
+              style={{ fontSize: 25, lineHeight: 1.35, color: "#3b3424" }}
             >
               {block.caption ?? "—"}
             </div>
@@ -67,7 +72,7 @@ export function PhotoBlockView({ block, imageUrl }: Props) {
             position: "absolute",
             bottom: 6,
             left: 16,
-            fontSize: 18,
+            fontSize: 21,
             color: "var(--ink-soft)",
             lineHeight: 1,
           }}
@@ -87,15 +92,30 @@ export function PhotoBlockView({ block, imageUrl }: Props) {
       }}
     >
       {imageUrl ? (
-        <a
-          href={imageUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open photo at full size"
-          style={{ display: "block", cursor: "zoom-in" }}
-        >
-          {inner}
-        </a>
+        <>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open photo at full size"
+            style={{
+              display: "block",
+              cursor: "zoom-in",
+              background: "transparent",
+              border: 0,
+              padding: 0,
+              width: "100%",
+              textAlign: "left",
+            }}
+          >
+            {inner}
+          </button>
+          <PhotoLightbox
+            src={imageUrl}
+            alt={block.caption}
+            open={open}
+            onClose={() => setOpen(false)}
+          />
+        </>
       ) : (
         inner
       )}

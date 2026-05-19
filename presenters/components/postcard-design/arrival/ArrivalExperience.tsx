@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence } from "motion/react";
 import type { Postcard } from "@/domain/types";
 import { PostcardLanding } from "../viewer/PostcardLanding";
 import { PostcardModalViewer } from "../viewer/PostcardModalViewer";
@@ -97,15 +98,17 @@ export function ArrivalExperience({
           insidePhotoSrc={insidePhotoSrc}
         />
       </div>
-      {phase === "open" && (
-        <div style={{ position: "absolute", inset: 0 }}>
-          <PostcardModalViewer
-            postcard={postcard}
-            resolveImageUrl={resolveImageUrl}
-            onDismiss={handleDismiss}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {phase === "open" && (
+          <div style={{ position: "absolute", inset: 0 }}>
+            <PostcardModalViewer
+              postcard={postcard}
+              resolveImageUrl={resolveImageUrl}
+              onDismiss={handleDismiss}
+            />
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
