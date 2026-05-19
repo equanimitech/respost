@@ -1,4 +1,5 @@
 import type { Postcard } from "@/domain/types";
+import { formatDistanceToNowStrict } from "date-fns";
 import { Postmark } from "../primitives/Postmark";
 
 type Props = { postcard: Postcard };
@@ -29,7 +30,7 @@ export function PostcardHeader({ postcard }: Props) {
         display: "flex",
         alignItems: "center",
         gap: 10,
-        padding: "14px 24px 0",
+        padding: "20px 24px 8px",
       }}
     >
       <div
@@ -67,7 +68,7 @@ export function PostcardHeader({ postcard }: Props) {
           }}
         >
           {postcard.place ? `sent from ${postcard.place} · ` : ""}
-          {formatDate(postcard.createdAt)}
+          {formatDistanceToNowStrict(postcard.createdAt, { addSuffix: true })}
         </div>
       </div>
       <Postmark

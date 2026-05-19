@@ -3,17 +3,28 @@
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { formatDistanceToNowStrict } from "date-fns";
 import type { PostcardMarker } from "@/domain/types";
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 type PostcardMapProps = {
   markers: PostcardMarker[];
+  hrefBase?: string;
 };
 
 /**
  * The main map view. This IS the feed.
  * No scroll. No timeline. Just geography with dots.
  */
-export function PostcardMap({ markers }: PostcardMapProps) {
+export function PostcardMap({ markers, hrefBase = "/p" }: PostcardMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
 
@@ -59,14 +70,21 @@ export function PostcardMap({ markers }: PostcardMapProps) {
         const opacity = Math.max(0.3, 1 - ageDays / 30); // fade over 30 days
         el.style.opacity = String(opacity);
 
-        const popup = new maplibregl.Popup({ offset: 12 })
+        const title = marker.title ? escapeHtml(marker.title) : "Postcard";
+        const brief = marker.brief ? escapeHtml(marker.brief) : "";
+        const place = marker.place ? escapeHtml(marker.place) : "";
+        const ago = formatDistanceToNowStrict(marker.createdAt, {
+          addSuffix: true,
+        });
+        const meta = [place, ago].filter(Boolean).join(" · ");
+
+        const popup = new maplibregl.Popup({ offset: 12, maxWidth: "260px" })
           .setHTML(
-            `<div style="font-family: system-ui; padding: 4px;">
-              <p style="margin: 0; font-size: 13px; font-weight: 500;">Postcard</p>
-              <p style="margin: 2px 0 0; font-size: 11px; color: #666;">
-                ${marker.createdAt.toLocaleDateString()}
-              </p>
-              <a href="/p/${marker.id}" style="font-size: 11px; color: #b8634a;">
+            `<div style="font-family: system-ui; padding: 4px; max-width: 240px;">
+              <p style="margin: 0; font-size: 13px; font-weight: 500; line-height: 1.25;">${title}</p>
+              ${brief ? `<p style="margin: 4px 0 0; font-size: 12px; color: #444; line-height: 1.35;">${brief}</p>` : ""}
+              <p style="margin: 6px 0 0; font-size: 10px; color: #888; letter-spacing: 0.6px; text-transform: uppercase;">${meta}</p>
+              <a href="${hrefBase}/${marker.id}" style="display: inline-block; margin-top: 6px; font-size: 11px; color: #b8634a;">
                 View postcard →
               </a>
             </div>`
@@ -92,7 +110,7 @@ export function PostcardMap({ markers }: PostcardMapProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [markers]);
+  }, [markers, hrefBase]);
 
   return (
     <div ref={mapContainer} className="h-full w-full" />

@@ -59,6 +59,7 @@ export type Postcard = {
   readonly place?: PlaceName;
   readonly senderLocation?: Location;
   readonly title?: string;
+  readonly brief?: string;
   readonly summary?: string;
   readonly cover?: PostcardImage;
   readonly blocks: ReadonlyArray<Block>;
@@ -73,6 +74,7 @@ export type CreatePostcardCommand = {
   readonly place?: string;
   readonly senderLocation?: Location;
   readonly title?: string;
+  readonly brief?: string;
   readonly summary?: string;
   readonly cover?: PostcardImage;
   readonly blocks: ReadonlyArray<Block>;
@@ -104,6 +106,9 @@ export type PostcardMarker = {
   readonly longitude: number;
   readonly authorDid: Did;
   readonly createdAt: Date;
+  readonly title?: string;
+  readonly brief?: string;
+  readonly place?: PlaceName;
 };
 
 // Re-export block types so consumers only need one import path.

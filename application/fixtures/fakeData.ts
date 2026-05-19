@@ -493,6 +493,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona"),
     senderLocation: locBarcelona,
     title: "Sunrise walk to the harbour",
+    brief: "Café Granja, then Parc Güell before the crowds.",
     summary:
       "A quiet morning at Café Granja, then up to Parc Güell before the crowds. Miles Davis on the headphones and the light bouncing off the water.",
     cover: { ref: fakeImages.cafe, mimeType: "image/jpeg" },
@@ -508,6 +509,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Lisbon"),
     senderLocation: locLisbon,
     title: "Slow mornings in Alfama",
+    brief: "Tiles, hills, a cat in every doorway.",
     summary:
       "Tiles, hills, and a cat in every doorway. Lisbon is taking its time with me this trip — and I'm letting it.",
     cover: { ref: fakeImages.street, mimeType: "image/jpeg" },
@@ -523,6 +525,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Kyoto"),
     senderLocation: locKyoto,
     title: "Bamboo and dawn in Arashiyama",
+    brief: "The grove before sunrise — sending you the quiet.",
     summary:
       "Got to the grove before sunrise — the wind through the stalks sounded like a whole crowd whispering. Sending you the quiet.",
     cover: { ref: fakeImages.forest, mimeType: "image/jpeg" },
@@ -538,6 +541,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Paris"),
     senderLocation: locParis,
     title: "Croissants in the Marais",
+    brief: "Found the bakery you wrote down. You were right.",
     summary:
       "Found the bakery you wrote down for me. You were right — best in the arrondissement. Clair de Lune the whole walk home.",
     cover: { ref: fakeImages.market, mimeType: "image/jpeg" },
@@ -553,6 +557,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Oaxaca"),
     senderLocation: locOaxaca,
     title: "Five in the morning at the market",
+    brief: "Mole, tlayudas, chocolate from a wheelbarrow.",
     summary:
       "Mole almendrado, tlayudas bigger than my torso, and a woman selling chocolate from a wheelbarrow. You would love it here.",
     cover: { ref: fakeImages.market, mimeType: "image/jpeg" },
@@ -568,6 +573,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Reykjavík"),
     senderLocation: locReykjavik,
     title: "Three pages outside Vík",
+    brief: "Quiet pressing in from every direction. Nils Frahm on repeat.",
     summary:
       "The quiet here presses in from every direction. Wrote three pages this morning without noticing the time. Nils Frahm on repeat.",
     cover: { ref: fakeImages.mountain, mimeType: "image/jpeg" },
@@ -583,6 +589,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona, terrace"),
     senderLocation: locBarcelona,
     title: "Back on the Barcelona terrace",
+    brief: "Coffee, Supernote, morning light.",
     summary:
       "Landed yesterday and slipped straight into the old rhythms. Coffee, Supernote, morning light. Meditation still pending.",
     cover: { ref: fakeImages.window, mimeType: "image/jpeg" },
@@ -598,6 +605,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona, terrace"),
     senderLocation: locBarcelona,
     title: "On handwriting and freedom",
+    brief: "Why I still write by hand.",
     summary:
       "A few pages from the Supernote on why I still write by hand. Freedom for the present, structure for the past and the future.",
     blocks: card8Blocks,
@@ -612,6 +620,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona, terrace"),
     senderLocation: locBarcelona,
     title: "Goals are the map, intentions the compass",
+    brief: "The paradox between goals and intentions.",
     summary:
       "Been chewing on the paradox between goals and intentions all morning. Sharing the page before the ink dries on the thought.",
     blocks: card9Blocks,
@@ -626,6 +635,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona"),
     senderLocation: locBarcelona,
     title: "Calligraphy is the blood",
+    brief: "On writing and publishing.",
     summary:
       "One short line from this morning's page on writing and publishing — the part of the practice I keep coming back to.",
     blocks: card10Blocks,
@@ -640,6 +650,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona"),
     senderLocation: locBarcelona,
     title: "Notes on eating, slow-carb style",
+    brief: "Slow carbs, protein early, a hundred steps after.",
     summary:
       "Pages from a morning with Tim Ferriss — slow carbs, protein early, and a Chinese proverb about a hundred steps after each meal.",
     blocks: card11Blocks,
@@ -654,6 +665,7 @@ export const fakePostcards: ReadonlyArray<Postcard> = [
     place: pn("Barcelona"),
     senderLocation: locBarcelona,
     title: "A quiet night with Tivo and Rod",
+    brief: "Pipeline nearly done. Reading more than reaching out.",
     summary:
       "Short one from bed. The pipeline is nearly done, the group feels right, and I'm reading more than reaching out this month.",
     blocks: card12Blocks,

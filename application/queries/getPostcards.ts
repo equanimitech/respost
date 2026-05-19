@@ -206,6 +206,9 @@ export async function getPostcardMarkers(): Promise<PostcardMarker[]> {
       longitude: loc.longitude,
       authorDid: p.authorDid,
       createdAt: p.createdAt,
+      title: p.title,
+      brief: p.brief,
+      place: p.place,
     });
   }
   return markers;
