@@ -7,20 +7,21 @@ type MarkdownTextProps = {
   style?: CSSProperties;
 };
 
-export function MarkdownText({ md, size = 17, style }: MarkdownTextProps) {
+export function MarkdownText({ md, size = 19, style }: MarkdownTextProps) {
   const paragraphs = splitParagraphs(md);
   return (
-    <div style={{ padding: "12px 28px", ...style }}>
+    <div style={{ padding: "18px 22px", ...style }}>
       {paragraphs.map((para, i) => {
         const segments = parseInline(para);
         return (
           <p
             key={i}
-            className="t-serif"
+            className="t-sans"
             style={{
-              margin: i === 0 ? "0 0 12px" : "12px 0",
+              margin: i === 0 ? "0 0 18px" : "18px 0",
               fontSize: size,
-              lineHeight: 1.55,
+              lineHeight: 1.5,
+              letterSpacing: "-0.005em",
               color: "var(--ink)",
               textWrap: "pretty",
             }}

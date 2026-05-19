@@ -8,6 +8,7 @@ type PhotoProps = {
   children?: ReactNode;
   style?: CSSProperties;
   label?: string;
+  fit?: "cover" | "contain";
 };
 
 const PLACEHOLDER_KINDS = new Set<PhotoKind>([
@@ -30,6 +31,7 @@ export function Photo({
   children,
   style,
   label,
+  fit = "cover",
 }: PhotoProps) {
   const placeholderClass = PLACEHOLDER_KINDS.has(kind) && !src
     ? `photo-placeholder ${kind}`
@@ -50,7 +52,14 @@ export function Photo({
         <img
           src={src}
           alt={alt}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: fit === "contain" ? "auto" : "100%",
+            maxHeight: "100%",
+            objectFit: fit,
+            display: "block",
+            background: fit === "contain" ? "var(--paper-light)" : undefined,
+          }}
         />
       ) : null}
       {label ? (
