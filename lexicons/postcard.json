@@ -28,6 +28,24 @@
             "maxGraphemes": 80,
             "description": "Sender's place line (e.g. 'Barcelona')."
           },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "maxGraphemes": 100,
+            "description": "Postcard headline. Used as og:title."
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 600,
+            "maxGraphemes": 300,
+            "description": "Short summary. Used as og:description. May be human-written or AI-generated."
+          },
+          "cover": {
+            "type": "blob",
+            "accept": ["image/jpeg", "image/png", "image/webp"],
+            "maxSize": 1500000,
+            "description": "Cover image. Used as og:image. Recommended 1200x630."
+          },
           "senderLocation": {
             "type": "ref",
             "ref": "#location"

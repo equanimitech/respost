@@ -34,15 +34,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Postcard not found" };
   }
 
-  const ref = firstPhotoRef(postcard);
-  const ogImage = ref ? [{ url: blobImageUrl(postcard.authorDid, ref) }] : [];
+  const title = postcard.title ?? `A postcard for ${postcard.to}`;
+  const description =
+    postcard.summary ??
+    `${postcard.from} sent you a postcard${postcard.place ? ` from ${postcard.place}` : ""}.`;
+
+  const coverRef = postcard.cover?.ref ?? firstPhotoRef(postcard);
+  const ogImage = coverRef
+    ? [{ url: blobImageUrl(postcard.authorDid, coverRef) }]
+    : [];
 
   return {
-    title: `A postcard for ${postcard.to}`,
-    description: `${postcard.from} sent you a postcard${postcard.place ? ` from ${postcard.place}` : ""}.`,
+    title,
+    description,
     openGraph: {
-      title: `A postcard for ${postcard.to}`,
-      description: `${postcard.from}${postcard.place ? ` · from ${postcard.place}` : ""} · tap to open`,
+      title,
+      description,
       type: "article",
       images: ogImage,
     },

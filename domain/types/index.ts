@@ -58,6 +58,9 @@ export type Postcard = {
   readonly from: SenderName;
   readonly place?: PlaceName;
   readonly senderLocation?: Location;
+  readonly title?: string;
+  readonly summary?: string;
+  readonly cover?: PostcardImage;
   readonly blocks: ReadonlyArray<Block>;
   readonly createdAt: Date;
 };
@@ -69,6 +72,9 @@ export type CreatePostcardCommand = {
   readonly from: string;
   readonly place?: string;
   readonly senderLocation?: Location;
+  readonly title?: string;
+  readonly summary?: string;
+  readonly cover?: PostcardImage;
   readonly blocks: ReadonlyArray<Block>;
 };
 

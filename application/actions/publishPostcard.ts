@@ -103,6 +103,9 @@ export type PublishInput = {
   from: string;
   place?: string;
   senderLocation?: SenderLocationInput;
+  title?: string;
+  summary?: string;
+  cover?: DraftBlobRef;
   blocks: ReadonlyArray<DraftBlock>;
 };
 
@@ -278,6 +281,11 @@ export async function publishPostcard(
       from: input.from.trim(),
       place: input.place?.trim(),
       senderLocation,
+      title: input.title?.trim() || undefined,
+      summary: input.summary?.trim() || undefined,
+      cover: input.cover
+        ? { ref: input.cover.ref.$link, mimeType: input.cover.mimeType }
+        : undefined,
       blocks: hydrated,
     };
 
@@ -303,6 +311,16 @@ export async function publishPostcard(
             latitude: senderLocation.latitude,
             longitude: senderLocation.longitude,
             granularity: senderLocation.granularity,
+          }
+        : undefined,
+      title: command.title,
+      summary: command.summary,
+      cover: input.cover
+        ? {
+            $type: "blob",
+            ref: input.cover.ref,
+            mimeType: input.cover.mimeType,
+            size: input.cover.size,
           }
         : undefined,
       blocks: recordBlocks,

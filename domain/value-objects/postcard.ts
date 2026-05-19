@@ -18,6 +18,8 @@ import { MUSIC_SERVICES, VIDEO_SERVICES } from "../types";
 const MAX_RECIPIENT_GRAPHEMES = 40;
 const MAX_SENDER_GRAPHEMES = 40;
 const MAX_PLACE_GRAPHEMES = 80;
+const MAX_TITLE_GRAPHEMES = 100;
+const MAX_SUMMARY_GRAPHEMES = 300;
 const MAX_MD_GRAPHEMES = 2000;
 const MAX_CAPTION_GRAPHEMES = 80;
 const MAX_BLOCKS = 40;
@@ -84,6 +86,28 @@ export function validatePlace(place: string | undefined): ValidationResult {
     return {
       valid: false,
       error: `Place must be ${MAX_PLACE_GRAPHEMES} characters or less`,
+    };
+  }
+  return { valid: true };
+}
+
+export function validateTitle(title: string | undefined): ValidationResult {
+  if (title === undefined || title.trim().length === 0) return { valid: true };
+  if (graphemes(title) > MAX_TITLE_GRAPHEMES) {
+    return {
+      valid: false,
+      error: `Title must be ${MAX_TITLE_GRAPHEMES} characters or less`,
+    };
+  }
+  return { valid: true };
+}
+
+export function validateSummary(summary: string | undefined): ValidationResult {
+  if (summary === undefined || summary.trim().length === 0) return { valid: true };
+  if (graphemes(summary) > MAX_SUMMARY_GRAPHEMES) {
+    return {
+      valid: false,
+      error: `Summary must be ${MAX_SUMMARY_GRAPHEMES} characters or less`,
     };
   }
   return { valid: true };
@@ -201,6 +225,12 @@ export function validatePostcard(
 
   const place = validatePlace(command.place);
   if (place.valid === false) return place;
+
+  const title = validateTitle(command.title);
+  if (title.valid === false) return title;
+
+  const summary = validateSummary(command.summary);
+  if (summary.valid === false) return summary;
 
   const blocks = validateBlocks(command.blocks);
   if (blocks.valid === false) return blocks;

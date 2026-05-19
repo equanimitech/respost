@@ -105,12 +105,22 @@ export type BlockRecord =
       imageUrl?: string;
     };
 
+export type CoverBlob = {
+  $type: "blob";
+  ref: { $link: string };
+  mimeType: string;
+  size: number;
+};
+
 export type PostcardRecord = {
   $type: typeof POSTCARD_COLLECTION;
   to: string;
   from: string;
   place?: string;
   senderLocation?: LocationField;
+  title?: string;
+  summary?: string;
+  cover?: CoverBlob;
   blocks: ReadonlyArray<BlockRecord>;
   createdAt: string;
 };
