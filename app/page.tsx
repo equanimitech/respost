@@ -86,6 +86,19 @@ export default async function Home() {
             >
               {t("mapCta")}
             </Link>
+            <Link
+              href="/drafts"
+              style={{
+                padding: "4px 18px",
+                color: "var(--ink-faint)",
+                textDecoration: "underline",
+                textUnderlineOffset: 4,
+                fontSize: 12,
+                textAlign: "center",
+              }}
+            >
+              {t("draftsCta")}
+            </Link>
           </div>
 
           <div
