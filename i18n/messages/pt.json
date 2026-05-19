@@ -11,7 +11,7 @@
   },
   "landing": {
     "tagline": "Um postal para alguém que você ama.",
-    "body": "Escreva algo baixinho. Coloque uma foto, uma música, um lugar. Mande o link. A caixa dela já está no WhatsApp.",
+    "body": "Escreva algo sem pressa. Coloque uma foto, uma música, um lugar. Mande o link. A caixa dela já está no WhatsApp.",
     "writeCta": "Escrever um postal",
     "mapCta": "Abrir meu mapa",
     "draftsCta": "Rascunhos",
@@ -37,7 +37,7 @@
     "tapToAddPhoto": "toque para adicionar uma foto",
     "addPhotoHint": "ou use a barra — ou digite / para música · vídeo · lugar · link",
     "writeHere": "escreva seu recado aqui · digite / para blocos",
-    "placeholderEmpty": "escreva algo baixinho…",
+    "placeholderEmpty": "escreva algo sem pressa…",
     "placeholderContinue": "continue…",
     "photoFailed": "Não foi possível adicionar a foto",
     "toolbar": {
