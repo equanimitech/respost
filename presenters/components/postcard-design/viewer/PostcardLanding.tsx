@@ -75,7 +75,7 @@ export function PostcardLanding({
               background: "var(--olive)",
             }}
           />
-          {shareUrlLabel ?? "respost.fyi"}
+          {shareUrlLabel ?? "respost.equanimi.tech"}
         </div>
         <div style={{ width: 16 }} />
       </div>

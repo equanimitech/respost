@@ -9,7 +9,7 @@ function fallbackOrigin(): string {
   return (
     process.env.NEXT_PUBLIC_SITE_ORIGIN ??
     process.env.SITE_ORIGIN ??
-    "https://respost.fyi"
+    "https://respost.equanimi.tech"
   );
 }
 

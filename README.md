@@ -121,7 +121,7 @@ ATPROTO_IDENTIFIER=…
 ATPROTO_PASSWORD=…
 RESPOST_SENDER_NAME=Rafa          # default sender display name
 RESPOST_SENDER_PLACE=Barcelona     # default sender place line (optional)
-NEXT_PUBLIC_SITE_ORIGIN=https://respost.fyi   # for share URLs
+NEXT_PUBLIC_SITE_ORIGIN=https://respost.equanimi.tech   # for share URLs
 ```
 
 ---

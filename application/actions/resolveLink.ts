@@ -16,7 +16,7 @@ export type ResolveLinkResult =
 const FETCH_TIMEOUT_MS = 4500;
 const MAX_BYTES = 800_000;
 const UA =
-  "Mozilla/5.0 (compatible; Respost/0.1; +https://respost.fyi) AppleWebKit/537.36";
+  "Mozilla/5.0 (compatible; Respost/0.1; +https://respost.equanimi.tech) AppleWebKit/537.36";
 
 type OgMeta = {
   title?: string;
