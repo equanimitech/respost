@@ -73,7 +73,10 @@
     "subheader": "faites défiler · voilà ce qui arrive",
     "back": "← Modifier",
     "sending": "Envoi…",
-    "share": "Partager le lien"
+    "share": "Partager le lien",
+    "modeEdit": "Modifier",
+    "modePreview": "Aperçu",
+    "modeToggleAria": "Modifier ou aperçu"
   },
   "sent": {
     "postmark": "ENVOYÉE",

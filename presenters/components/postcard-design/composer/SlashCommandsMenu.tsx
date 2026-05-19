@@ -66,13 +66,15 @@ export const SlashCommandsMenu = forwardRef<SlashCommandsMenuHandle, Props>(
   function SlashCommandsMenu({ items, command }, ref) {
     const t = useTranslations("slashMenu");
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [prevItems, setPrevItems] = useState(items);
     const listRef = useRef<HTMLDivElement | null>(null);
     const hoverLockUntilRef = useRef(0);
     const slices = useMemo(() => groupItems(items), [items]);
 
-    useEffect(() => {
+    if (prevItems !== items) {
+      setPrevItems(items);
       setSelectedIndex(0);
-    }, [items]);
+    }
 
     // Keyboard moves should scroll the selected item into view; lock pointer
     // hover for a short window so a static cursor doesn't snap selection back.

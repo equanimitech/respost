@@ -8,6 +8,7 @@ import {
   parseAsString,
   parseAsStringEnum,
   parseAsJson,
+  parseAsBoolean,
 } from "nuqs";
 import { publishPostcard } from "@/application/actions/publishPostcard";
 import type { DraftBlock } from "@/application/composer/draftBlock";
@@ -22,11 +23,10 @@ import {
   type DraftId,
 } from "@/infrastructure/local/draftStore";
 import { ComposerRecipient } from "../composer/ComposerRecipient";
-import { ComposerEditor } from "../composer/ComposerEditor";
-import { ComposerPreview } from "../composer/ComposerPreview";
+import { ComposerWorkspace } from "../composer/ComposerWorkspace";
 import { draftBlocksSchema } from "./draftSchema";
 
-const STEPS = ["recipient", "editor", "preview"] as const;
+const STEPS = ["recipient", "editor"] as const;
 type Step = (typeof STEPS)[number];
 
 const blocksParser = parseAsJson<ReadonlyArray<DraftBlock>>((v) => {
@@ -39,6 +39,7 @@ const composerParsers = {
   from: parseAsString.withDefault(""),
   place: parseAsString.withDefault(""),
   step: parseAsStringEnum<Step>([...STEPS]).withDefault("recipient"),
+  preview: parseAsBoolean.withDefault(false),
   blocks: blocksParser,
   draft: parseAsString.withDefault(""),
   propose: parseAsString.withDefault(""),
@@ -57,7 +58,7 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
     history: "replace",
     clearOnDefault: true,
   });
-  const { to, step, blocks } = state;
+  const { to, step, blocks, preview } = state;
 
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -174,6 +175,7 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
       from: "",
       place: "",
       step: "recipient",
+      preview: false,
       blocks: [],
       draft: "",
     });
@@ -233,31 +235,20 @@ export function ComposerFlow({ defaultSender, defaultPlace }: Props) {
     );
   }
 
-  if (step === "editor") {
-    return (
-      <ComposerEditor
-        to={to}
-        blocks={blocks}
-        onChange={onChangeBlocks}
-        onChangeRecipient={() => setState({ step: "recipient" })}
-        onClose={close}
-        onPreview={() => setState({ step: "preview" })}
-        resolveImageUrl={resolveImageUrl}
-        onRegisterPreviewUrl={registerPreviewUrl}
-      />
-    );
-  }
-
   return (
-    <ComposerPreview
+    <ComposerWorkspace
       to={to}
       blocks={blocks}
-      onBack={() => setState({ step: "editor" })}
+      preview={preview}
+      onChange={onChangeBlocks}
+      onChangeMode={(next) => setState({ preview: next })}
+      onChangeRecipient={() => setState({ step: "recipient" })}
+      onClose={close}
       onPublish={onPublish}
       publishing={publishing}
       error={error}
-      onClose={close}
       resolveImageUrl={resolveImageUrl}
+      onRegisterPreviewUrl={registerPreviewUrl}
     />
   );
 }

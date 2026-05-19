@@ -73,7 +73,10 @@
     "subheader": "scroll through · this is what arrives",
     "back": "← Edit",
     "sending": "Sending…",
-    "share": "Share the link"
+    "share": "Share the link",
+    "modeEdit": "Edit",
+    "modePreview": "Preview",
+    "modeToggleAria": "Edit or preview"
   },
   "sent": {
     "postmark": "SENT",

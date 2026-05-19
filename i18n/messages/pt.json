@@ -73,7 +73,10 @@
     "subheader": "role devagar · é isso que chega",
     "back": "← Editar",
     "sending": "Enviando…",
-    "share": "Compartilhar o link"
+    "share": "Compartilhar o link",
+    "modeEdit": "Editar",
+    "modePreview": "Pré-visualizar",
+    "modeToggleAria": "Editar ou pré-visualizar"
   },
   "sent": {
     "postmark": "ENVIADO",

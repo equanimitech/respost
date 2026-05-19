@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -39,7 +40,7 @@ export function DraftsList() {
     deleteDraft(id);
   };
 
-  const now = Date.now();
+  const [now] = useState(() => Date.now());
 
   return (
     <div

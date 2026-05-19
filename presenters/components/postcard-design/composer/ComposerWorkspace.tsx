@@ -4,14 +4,15 @@ import { useMemo, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import type {
   DraftBlock,
-  DraftLinkBlock,
   DraftPhotoBlock,
 } from "@/application/composer/draftBlock";
 import { isDraftLinkBlock } from "@/application/composer/draftBlock";
 import { uploadImageBlob } from "@/application/actions/uploadImageBlob";
 import { resolveLink, type LinkKind } from "@/application/actions/resolveLink";
+import type { Block, BlockId, PhotoBlock, PhotoKind } from "@/domain/types";
 import { Icon } from "../primitives/Icon";
 import { ComposerChrome } from "./ComposerChrome";
+import { PostcardBlockView } from "../blocks/PostcardBlockView";
 import { compressImage } from "../compose-flow/compressImage";
 import {
   TiptapPostcardEditor,
@@ -22,31 +23,75 @@ import {
   buildFormatCommands,
   type FormatCommandKind,
 } from "./slashCommands";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/presenters/components/ui/toggle-group";
 
 type Props = {
   to: string;
   blocks: ReadonlyArray<DraftBlock>;
+  preview: boolean;
   onChange: (next: ReadonlyArray<DraftBlock>) => void;
-  onClose?: () => void;
+  onChangeMode: (preview: boolean) => void;
   onChangeRecipient: () => void;
-  onPreview: () => void;
+  onClose?: () => void;
+  onPublish: () => void;
+  publishing: boolean;
+  error: string | null;
   resolveImageUrl?: (ref: string) => string | undefined;
   onRegisterPreviewUrl?: (refLink: string, url: string) => void;
 };
 
 const URL_RE = /^https?:\/\/[^\s]+$/;
 
-export function ComposerEditor({
+function draftToView(d: DraftBlock, idx: number): Block {
+  const fakeId = `preview-${idx}` as BlockId;
+  switch (d.type) {
+    case "md":
+      return { type: "md", id: fakeId, md: d.md };
+    case "photo": {
+      const kind: PhotoKind = d.kind;
+      const block: PhotoBlock = {
+        type: "photo",
+        id: fakeId,
+        kind,
+        image: d.blob
+          ? { ref: d.blob.ref.$link, mimeType: d.blob.mimeType }
+          : undefined,
+        caption: d.caption,
+        rot: d.rot ?? -1,
+      };
+      return block;
+    }
+    case "music":
+      return { ...d, id: fakeId };
+    case "video":
+      return { ...d, id: fakeId };
+    case "place":
+      return { ...d, id: fakeId };
+    case "article":
+      return { ...d, id: fakeId };
+  }
+}
+
+export function ComposerWorkspace({
   to,
   blocks,
+  preview,
   onChange,
-  onClose,
+  onChangeMode,
   onChangeRecipient,
-  onPreview,
+  onClose,
+  onPublish,
+  publishing,
+  error,
   resolveImageUrl,
   onRegisterPreviewUrl,
 }: Props) {
   const t = useTranslations("editor");
+  const tPreview = useTranslations("preview");
+
   const [photoBusy, setPhotoBusy] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [linkPrompt, setLinkPrompt] = useState<{
@@ -127,10 +172,6 @@ export function ComposerEditor({
 
   const dismissLinkPrompt = () => setLinkPrompt(null);
 
-  const goPreview = () => {
-    onPreview();
-  };
-
   const tSlash = useTranslations("linkSlashCommands");
   const tFormat = useTranslations("slashCommands");
   const formatSlashItems = useMemo<readonly SlashCommandItem[]>(
@@ -193,12 +234,18 @@ export function ComposerEditor({
   );
 
   const empty = blocks.length === 0;
+  const canPublish = !empty && !publishing;
 
   return (
-    <div className="app">
-      <ComposerChrome step={1} total={3} title={t("chromeTitle")} onClose={onClose} />
+    <div className={preview ? "app paper-grain" : "app"}>
+      <ComposerChrome
+        step={preview ? 2 : 1}
+        total={3}
+        title={preview ? tPreview("chromeTitle") : t("chromeTitle")}
+        onClose={onClose}
+      />
 
-      {/* Addressee tab */}
+      {/* Mode toggle + addressee */}
       <div
         style={{
           padding: "4px 22px 10px",
@@ -224,6 +271,21 @@ export function ComposerEditor({
           {to}
         </div>
         <div style={{ flex: 1 }} />
+        <ToggleGroup
+          type="single"
+          value={preview ? "preview" : "edit"}
+          onValueChange={(v) => {
+            if (v === "edit" || v === "preview") onChangeMode(v === "preview");
+          }}
+          variant="outline"
+          size="sm"
+          aria-label={tPreview("modeToggleAria")}
+        >
+          <ToggleGroupItem value="edit">{tPreview("modeEdit")}</ToggleGroupItem>
+          <ToggleGroupItem value="preview" disabled={empty}>
+            {tPreview("modePreview")}
+          </ToggleGroupItem>
+        </ToggleGroup>
         <button
           type="button"
           onClick={onChangeRecipient}
@@ -248,81 +310,92 @@ export function ComposerEditor({
             borderRadius: 14,
             border: "1px solid var(--paper-edge)",
             boxShadow: "var(--sh-soft)",
-            padding: "6px 0 4px",
+            padding: preview ? "14px 0 24px" : "6px 0 4px",
             minHeight: "60%",
             display: "flex",
             flexDirection: "column",
           }}
         >
-          {empty && (
-            <button
-              type="button"
-              onClick={() => onPickPhoto("uploaded")}
-              disabled={photoBusy}
-              style={{
-                margin: "12px 18px 6px",
-                padding: "22px 16px",
-                borderRadius: 10,
-                border: "1.5px dashed var(--paper-edge)",
-                background: "transparent",
-                color: "var(--ink-mute)",
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 6,
-                fontFamily: "inherit",
-              }}
-              aria-label={t("addPhotoAria")}
-            >
-              <Icon name="image" size={26} strokeWidth={1.4} />
-              <div className="t-mono" style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase" }}>
-                {t("tapToAddPhoto")}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>
-                {t("addPhotoHint")}
-              </div>
-            </button>
-          )}
+          {preview ? (
+            blocks.map((b, i) => (
+              <PostcardBlockView
+                key={i}
+                block={draftToView(b, i)}
+                resolveImageUrl={resolveImageUrl}
+              />
+            ))
+          ) : (
+            <>
+              {empty && (
+                <button
+                  type="button"
+                  onClick={() => onPickPhoto("uploaded")}
+                  disabled={photoBusy}
+                  style={{
+                    margin: "12px 18px 6px",
+                    padding: "22px 16px",
+                    borderRadius: 10,
+                    border: "1.5px dashed var(--paper-edge)",
+                    background: "transparent",
+                    color: "var(--ink-mute)",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 6,
+                    fontFamily: "inherit",
+                  }}
+                  aria-label={t("addPhotoAria")}
+                >
+                  <Icon name="image" size={26} strokeWidth={1.4} />
+                  <div className="t-mono" style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase" }}>
+                    {t("tapToAddPhoto")}
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>
+                    {t("addPhotoHint")}
+                  </div>
+                </button>
+              )}
 
-          {/* Unified tiptap editor — text + photos + link cards in one doc */}
-          <div
-            style={{
-              position: "relative",
-              padding: "14px 22px 20px",
-              flex: 1,
-            }}
-          >
-            {empty && (
               <div
-                className="t-mono"
                 style={{
-                  fontSize: 9,
-                  letterSpacing: 1.5,
-                  color: "var(--ink-mute)",
-                  textTransform: "uppercase",
-                  marginBottom: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
+                  position: "relative",
+                  padding: "14px 22px 20px",
+                  flex: 1,
                 }}
               >
-                <span aria-hidden>✎</span> {t("writeHere")}
+                {empty && (
+                  <div
+                    className="t-mono"
+                    style={{
+                      fontSize: 9,
+                      letterSpacing: 1.5,
+                      color: "var(--ink-mute)",
+                      textTransform: "uppercase",
+                      marginBottom: 6,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                    }}
+                  >
+                    <span aria-hidden>✎</span> {t("writeHere")}
+                  </div>
+                )}
+                <TiptapPostcardEditor
+                  value={blocks}
+                  onChange={onChange}
+                  slashItems={slashItems}
+                  placeholder={empty ? t("placeholderEmpty") : t("placeholderContinue")}
+                  resolveImageUrl={resolveImageUrl}
+                  removeAriaLabel={t("removeBlockAria")}
+                  handleRef={editorHandleRef}
+                />
               </div>
-            )}
-            <TiptapPostcardEditor
-              value={blocks}
-              onChange={onChange}
-              slashItems={slashItems}
-              placeholder={empty ? t("placeholderEmpty") : t("placeholderContinue")}
-              resolveImageUrl={resolveImageUrl}
-              removeAriaLabel={t("removeBlockAria")}
-              handleRef={editorHandleRef}
-            />
-          </div>
+            </>
+          )}
         </div>
 
-        {photoError && (
+        {photoError && !preview && (
           <div
             role="alert"
             aria-live="polite"
@@ -342,7 +415,7 @@ export function ComposerEditor({
       </div>
 
       {/* Link prompt — appears above the toolbar when a slash command is picked */}
-      {linkPrompt && (
+      {!preview && linkPrompt && (
         <div
           style={{
             padding: "10px 14px",
@@ -449,7 +522,7 @@ export function ComposerEditor({
         </div>
       )}
 
-      {/* Toolbar */}
+      {/* Footer: toolbar (edit) + Share (always) */}
       <div
         style={{
           padding: "6px 10px calc(6px + env(safe-area-inset-bottom))",
@@ -461,93 +534,115 @@ export function ComposerEditor({
           flexShrink: 0,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <button
-            type="button"
-            onClick={() => onPickPhoto("uploaded")}
-            disabled={photoBusy}
-            style={toolBtnStyle()}
-            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-            title={t("toolbar.photo")}
-            aria-label={t("toolbar.photo")}
-          >
-            <Icon name="image" size={18} strokeWidth={1.6} />
-          </button>
-          <button
-            type="button"
-            onClick={() => openLinkPrompt("song")}
-            style={toolBtnStyle()}
-            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-            title={t("toolbar.song")}
-            aria-label={t("toolbar.song")}
-          >
-            <Icon name="music" size={18} strokeWidth={1.6} />
-          </button>
-          <button
-            type="button"
-            onClick={() => openLinkPrompt("video")}
-            style={toolBtnStyle()}
-            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-            title={t("toolbar.video")}
-            aria-label={t("toolbar.video")}
-          >
-            <Icon name="play" size={18} strokeWidth={1.6} />
-          </button>
-          <button
-            type="button"
-            onClick={() => openLinkPrompt("place")}
-            style={toolBtnStyle()}
-            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-            title={t("toolbar.place")}
-            aria-label={t("toolbar.place")}
-          >
-            <Icon name="pin" size={18} strokeWidth={1.6} />
-          </button>
-          <button
-            type="button"
-            onClick={() => openLinkPrompt("link")}
-            style={toolBtnStyle()}
-            className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
-            title={t("toolbar.link")}
-            aria-label={t("toolbar.link")}
-          >
-            <Icon name="edit" size={18} strokeWidth={1.6} />
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleAddPhoto(f, "uploaded");
-              e.target.value = "";
+        {!preview && (
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button
+              type="button"
+              onClick={() => onPickPhoto("uploaded")}
+              disabled={photoBusy}
+              style={toolBtnStyle()}
+              className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+              title={t("toolbar.photo")}
+              aria-label={t("toolbar.photo")}
+            >
+              <Icon name="image" size={18} strokeWidth={1.6} />
+            </button>
+            <button
+              type="button"
+              onClick={() => openLinkPrompt("song")}
+              style={toolBtnStyle()}
+              className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+              title={t("toolbar.song")}
+              aria-label={t("toolbar.song")}
+            >
+              <Icon name="music" size={18} strokeWidth={1.6} />
+            </button>
+            <button
+              type="button"
+              onClick={() => openLinkPrompt("video")}
+              style={toolBtnStyle()}
+              className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+              title={t("toolbar.video")}
+              aria-label={t("toolbar.video")}
+            >
+              <Icon name="play" size={18} strokeWidth={1.6} />
+            </button>
+            <button
+              type="button"
+              onClick={() => openLinkPrompt("place")}
+              style={toolBtnStyle()}
+              className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+              title={t("toolbar.place")}
+              aria-label={t("toolbar.place")}
+            >
+              <Icon name="pin" size={18} strokeWidth={1.6} />
+            </button>
+            <button
+              type="button"
+              onClick={() => openLinkPrompt("link")}
+              style={toolBtnStyle()}
+              className="focus-visible:ring-2 focus-visible:ring-[var(--inkblue)] focus-visible:outline-none"
+              title={t("toolbar.link")}
+              aria-label={t("toolbar.link")}
+            >
+              <Icon name="edit" size={18} strokeWidth={1.6} />
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleAddPhoto(f, "uploaded");
+                e.target.value = "";
+              }}
+            />
+            <input
+              ref={handwritingRef}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleAddPhoto(f, "handwriting");
+                e.target.value = "";
+              }}
+            />
+          </div>
+        )}
+
+        {error && (
+          <div
+            style={{
+              padding: "8px 12px",
+              background: "rgba(168,73,60,.10)",
+              border: "1px solid var(--stamp-red)",
+              borderRadius: 8,
+              color: "var(--stamp-red)",
+              fontSize: 12,
             }}
-          />
-          <input
-            ref={handwritingRef}
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleAddPhoto(f, "handwriting");
-              e.target.value = "";
-            }}
-          />
-        </div>
+          >
+            {error}
+          </div>
+        )}
+
         <button
           type="button"
-          onClick={goPreview}
-          disabled={blocks.length === 0}
+          onClick={preview ? onPublish : () => onChangeMode(true)}
+          disabled={preview ? !canPublish : empty}
           style={{
             width: "100%",
             padding: "12px 18px",
             borderRadius: 999,
-            background: "var(--ink)",
+            background: preview
+              ? publishing
+                ? "var(--ink-faint)"
+                : "var(--terra)"
+              : "var(--ink)",
             color: "var(--paper-light)",
             border: "none",
-            cursor: "pointer",
+            cursor: (preview ? !canPublish : empty) ? "default" : "pointer",
             fontFamily: "inherit",
             fontSize: 13,
             fontWeight: 600,
@@ -555,10 +650,15 @@ export function ComposerEditor({
             alignItems: "center",
             justifyContent: "center",
             gap: 5,
-            opacity: blocks.length === 0 ? 0.45 : 1,
+            opacity: (preview ? !canPublish : empty) ? 0.45 : 1,
+            boxShadow: preview && !publishing ? "0 4px 16px rgba(184,99,74,.3)" : undefined,
           }}
         >
-          {t("previewCta")}
+          {preview
+            ? publishing
+              ? tPreview("sending")
+              : tPreview("share")
+            : t("previewCta")}
         </button>
       </div>
     </div>
